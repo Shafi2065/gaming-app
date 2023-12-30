@@ -1,60 +1,60 @@
 import React, { useState } from "react";
-import { initializeApp } from 'firebase/app';
-import 'firebase/auth';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import '../app/firebaseAuth';
 
 function Register() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   
-  const handleValidation = () => {
+  const handleRegistration = (e) => {
+    e.preventDefault();
+    
+    // Password validation
     if (password === "") {
       setErrorMessage("Please enter a password");
     } else if (password.search(/[a-z]/) < 0) { 
-      console.log("Password does not contain a lowercase letter");
       setErrorMessage("Password must contain a lowercase letter");
     } else if (password.length < 8) {
-      console.log("Password less than 8 characters");
       setErrorMessage("Password must contain at least 8 characters");
     } else if (password.search(/[A-Z]/) < 0) {
       setErrorMessage("Password must contain a capital letter");
     } else if (password.search(/[0-9]/) < 0) {
-      console.log("Password does not have a number");
       setErrorMessage("Password must contain a digit");
     } else {
-      console.log("Password successful");
-      setErrorMessage("Password is valid");
+      const auth = getAuth();
+    
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(userCredential);
+          setRegistrationSuccess(true);
+        })
+        .catch((error) => {
+          console.error(error.code, error.message);
+          setErrorMessage("Registration failed. Please try again.");
+        });
     }
-};
-  // Call this function when submitting the form
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Perform validation before submitting
-    handleValidation();
-    // Continue with form submission logic if needed
-    console.log("A username was submitted " + username);
-    console.log("A password was submitted " + password);
   };
 
   return (
     <div className="register-container">
         <fieldset>
         <legend className="register-heading">Register</legend>
-      <form className="register" onSubmit={handleSubmit}>
+      <form className="register" onSubmit={handleRegistration}>
         <label>
-          Enter your username:
+          Enter your Email:
           <input
             type="text"
-            value={username}
-            placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
           />
         </label>
 
         <label>
-          Enter your password:
+          Enter your Password:
           <input
             type="password"
             value={password}
@@ -63,6 +63,9 @@ function Register() {
           />
           <p>{errorMessage}</p>
         </label>
+
+        {registrationSuccess && <p style={{ color: 'green' }}>Successfully Registered</p>}
+        
         <button type="submit">Register</button>
       </form>
       </fieldset>
