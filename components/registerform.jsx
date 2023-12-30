@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import { initializeApp } from 'firebase/app';
+import 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import '../app/firebaseAuth';
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
+  
   const handleValidation = () => {
     if (password === "") {
       setErrorMessage("Please enter a password");
@@ -44,6 +48,7 @@ function Register() {
           <input
             type="text"
             value={username}
+            placeholder="Username"
             onChange={(e) => setUsername(e.target.value)}
           />
         </label>
@@ -53,6 +58,7 @@ function Register() {
           <input
             type="password"
             value={password}
+            placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <p>{errorMessage}</p>

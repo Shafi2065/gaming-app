@@ -1,24 +1,36 @@
 import React, { useState } from "react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import '../app/firebaseAuth';
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("A username was submitted " + username);
-    console.log("A password was submitted " + password);
-
+  const handleLogin = (e) => {
+    e.preventDefault();
+    
+    const auth = getAuth();
+    
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log(userCredential);
+        <h6>Succesfully signed in</h6>
+      })
+      .catch((error) => {
+        console.error(error.code, error.message);
+        <h6 color="red">Error signing in</h6>
+      });
   };
+
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <label>
-          Enter your username:
+          Enter your email:
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </label>
 
@@ -27,7 +39,7 @@ function Login() {
           <input
             type="password"
             value={password}
-            onChange={(e) => handlePassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </label>
         <button type="submit">Login</button>
