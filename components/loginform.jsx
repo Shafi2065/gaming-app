@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Swal from 'sweetalert2'
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -20,6 +22,12 @@ function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
+
+        Swal.fire({
+          title: "Successfully Logged in",
+          text: "redirecting to another page",
+          icon: "success"
+        });
       })
       .catch((error) => {
         console.error(error.code, error.message);
@@ -53,8 +61,10 @@ function Login() {
       });
   };
   return (
-    <div>
-      <form onSubmit={handleLogin}>
+    <div className="register-container">
+      <fieldset>
+      <legend className="register-heading">Login</legend>
+      <form className="register" onSubmit={handleLogin}>
         <label>
           Enter your email:
           <input
@@ -72,11 +82,15 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-        <button type="submit">Login</button>
-        <a href="#">Register an account today!</a>
-
-        <button onClick={googleLogin}>Google Login</button>
+        <Button variant="primary" type="submit">
+            Login
+          </Button>
+        
+          <Button variant="primary" type="submit" onClick={googleLogin}>
+            Google Sign-in
+          </Button>
       </form>
+      </fieldset>
     </div>
   );
 }
