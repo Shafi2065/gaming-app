@@ -24,7 +24,7 @@ function Register() {
       setErrorMessage("Password must contain a digit");
     } else {
       const auth = getAuth();
-    
+      
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
@@ -65,7 +65,7 @@ function Register() {
         </label>
 
         {registrationSuccess && <p style={{ color: 'green' }}>Successfully Registered</p>}
-        
+
         <button type="submit">Register</button>
       </form>
       </fieldset>
