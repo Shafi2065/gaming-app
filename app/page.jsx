@@ -4,7 +4,7 @@ import TopNav from "../components/topNav";
 import Footer from "../components/footer"
 import "../public/style.css";
 import "./globals.css";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
@@ -28,7 +28,10 @@ export default function Index() {
       } else {
         setIsAuthenticated(false);
       }
-    }); 
+    });
+  
+    return () => unsubscribe(); 
+  }, []); 
  // Define the timeline for the banner animations
   useEffect(() => {
     var t1 = gsap.timeline();
@@ -48,7 +51,6 @@ export default function Index() {
 
   // Define the animations for the explore containers
   const exploreAnimations = () => {
-    var t2 = gsap.timeline();
     // Trigger animations when the exploreContainer comes into view
     gsap.fromTo("#exploreContainer", {
       opacity: 0,
@@ -80,7 +82,7 @@ export default function Index() {
         trigger: "#exploreContainer2",
         ease: "power1.inOut",
         pin: false,
-        start: "center center"
+        start: "bottom bottom"
       },
     });
   };
@@ -95,7 +97,7 @@ export default function Index() {
         {isAuthenticated && <TopNav />}
         <div className="bannerContent">
           <h1 className="bannerText">Find Your Place.</h1>
-          <Button variant="primary" className="bannerButton" Link href="/login">
+          <Button variant="primary" Link href="/login">
             Explore
           </Button>{" "}
         </div>
