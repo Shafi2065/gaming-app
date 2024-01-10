@@ -3,7 +3,9 @@
 }
 body {
   margin: 0;
+  padding: 0;
   display: block;
+  width: 100vw;
 }
 ul {
   list-style: none;
@@ -14,11 +16,11 @@ ul {
   margin-left: auto;
   font-size: large;
 }
-li:hover {
+#navItems:hover {
   color: red;
   text-decoration: underline;
 }
-li:active {
+#navItems:active {
   color: red;
 }
 .homeContainer {

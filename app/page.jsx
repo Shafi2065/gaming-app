@@ -62,7 +62,7 @@ export default function Index() {
         y: 0,
       scrollTrigger: {
         trigger: "#exploreContainer",
-        ease: "power1.inOut",
+        ease: "power3.inOut",
         pin: false,
         start: "top top"
       },
@@ -80,7 +80,7 @@ export default function Index() {
       delay: 1,
       scrollTrigger: {
         trigger: "#exploreContainer2",
-        ease: "power1.inOut",
+        ease: "power3.inOut",
         pin: false,
         start: "bottom bottom"
       },
