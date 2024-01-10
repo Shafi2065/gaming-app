@@ -26,6 +26,10 @@ ul {
 #navItems:active {
   color: red;
 }
+.profile-image {
+  width: 3rem;
+  height: 3rem;
+}
 .homeContainer {
   display: flex;
   flex-direction: column;

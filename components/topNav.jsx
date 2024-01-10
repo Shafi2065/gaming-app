@@ -22,19 +22,28 @@ export default function TopNav() {
             <Nav.Link id="navItems" Link href="#pricing">
               Live Games
             </Nav.Link>
-            <NavDropdown title="My Team" id="collapsible-nav-dropdown">
+            <NavDropdown
+              id="collapsible-nav-dropdown"
+              title={
+                <img
+                  src="default-profile.png"
+                  roundedCircle
+                  className="profile-image"
+                />
+              }
+            >
               <NavDropdown.Item id="dropDownItems" href="#action/3.1">
-                Team Page
+                My Profile
               </NavDropdown.Item>
               <NavDropdown.Item id="dropDownItems" href="#action/3.2">
-                View Teams{" "}
+                My Teams
               </NavDropdown.Item>
               <NavDropdown.Item id="dropDownItems" href="#action/3.3">
-                Manage Team
+                Friends List
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item id="redDropDownItems" href="#action/3.4">
-                Leave Team
+                Deactivate Profile
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
