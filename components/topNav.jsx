@@ -16,11 +16,17 @@ export default function TopNav() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link id="navItems" Link href="/features">
+            <Nav.Link id="navItems" Link href="/">
               Home
             </Nav.Link>
-            <Nav.Link id="navItems" Link href="#pricing">
+            <Nav.Link id="navItems" Link href="/Games">
               Live Games
+            </Nav.Link>
+            <Nav.Link id="navItems" Link href="/Teams">
+              Find a Team
+            </Nav.Link>
+            <Nav.Link id="navItems" Link href="/Players">
+              Search Players
             </Nav.Link>
             <NavDropdown
               id="collapsible-nav-dropdown"
