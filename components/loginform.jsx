@@ -1,27 +1,29 @@
 import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Swal from 'sweetalert2'
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import "../app/firebaseAuth";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-<<<<<<< Updated upstream
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("A username was submitted " + username);
-    console.log("A password was submitted " + password);
-
-=======
   const handleLogin = (e) => {
     e.preventDefault();
-    
-    setErrorMessage("");
 
     const auth = getAuth();
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
+
         Swal.fire({
           title: "Successfully Logged in",
           text: "redirecting to another page",
@@ -30,7 +32,6 @@ function Login() {
       })
       .catch((error) => {
         console.error(error.code, error.message);
-        setErrorMessage("Invalid Login");
       });
   };
 
@@ -59,17 +60,18 @@ function Login() {
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
->>>>>>> Stashed changes
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="register-container">
+      <fieldset>
+      <legend className="register-heading">Login</legend>
+      <form className="register" onSubmit={handleLogin}>
         <label>
-          Enter your username:
+          Enter your email:
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </label>
 
@@ -78,13 +80,19 @@ function Login() {
           <input
             type="password"
             value={password}
-            onChange={(e) => handlePassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <p>{errorMessage}</p>
         </label>
-        <button type="submit">Login</button>
-        <a href="#">Register an account today!</a>
+        <Button variant="primary" type="submit">
+            Login
+          </Button>
+        
+          <Button variant="primary" type="submit" onClick={googleLogin}>
+            Google Sign-in
+          </Button>
       </form>
+      </fieldset>
     </div>
   );
 }
