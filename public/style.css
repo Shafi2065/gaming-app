@@ -6,6 +6,9 @@ body {
   padding: 0;
   display: block;
   width: 100vw;
+  font-family: sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
 }
 ul {
   list-style: none;
@@ -75,7 +78,7 @@ ul {
   text-justify: auto;
   word-wrap: break-word;
   justify-content: center;
-  width: 100%;
+  background-color: #161616;
 }
 #exploreContainer {
   background-color: black;
@@ -103,9 +106,36 @@ ul {
 #col3 {
   background-color: aqua;
 }
+.thirdSection {
+  padding: 2rem;
+}
+.thumbnail-button {
+  opacity: 0;
+}
+.card:hover .thumbnail-button {
+opacity: 1;
+transition: opacity 0.3s ease-in-out;
+}
+.thumbnail:hover {
+  background-color: rgb(255, 255, 255);
+}
+.cardopacity:hover {
+  opacity: 0.3;
+  transition: opacity 0.3s ease-in-out;
+}
+/* not actually the cards on homepage, was just too lazy to change div names, change later perhaps */
+.Cards {
+  padding: 0; /* Adjust the padding as needed */
+  margin: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0;
+}
+
 /* Footer container */
 #footer {
-  background-color: black ;
+  background-color: black;
   margin: 0;
   padding: 0;
 }
@@ -121,7 +151,7 @@ ul {
   padding-bottom: 5rem;
 }
 .custom-divider {
-border-bottom: 1px solid gray;
-margin: 0;
-padding: 0;
+  border-bottom: 1px solid gray;
+  margin: 0;
+  padding: 0;
 }

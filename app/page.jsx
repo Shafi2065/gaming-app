@@ -1,7 +1,7 @@
 "use client";
 import { gsap } from "gsap";
 import TopNav from "../components/topNav";
-import Footer from "../components/footer"
+import Footer from "../components/footer";
 import "../public/style.css";
 import "./globals.css";
 import { useState, useEffect } from "react";
@@ -11,9 +11,11 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import ListGroup from "react-bootstrap/ListGroup";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import './firebaseAuth';
+import "./firebaseAuth";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,10 +31,10 @@ export default function Index() {
         setIsAuthenticated(false);
       }
     });
-  
-    return () => unsubscribe(); 
-  }, []); 
- // Define the timeline for the banner animations
+
+    return () => unsubscribe();
+  }, []);
+  // Define the timeline for the banner animations
   useEffect(() => {
     var t1 = gsap.timeline();
     var tween = gsap.fromTo(
@@ -52,39 +54,45 @@ export default function Index() {
   // Define the animations for the explore containers
   const exploreAnimations = () => {
     // Trigger animations when the exploreContainer comes into view
-    gsap.fromTo("#exploreContainer", {
-      opacity: 0,
-      y: -200,
-      duration: 1,
-    },
+    gsap.fromTo(
+      "#exploreContainer",
+      {
+        opacity: 0,
+        y: -200,
+        duration: 1,
+      },
       {
         opacity: 1,
         y: 0,
-      scrollTrigger: {
-        trigger: "#exploreContainer",
-        ease: "power3.inOut",
-        pin: false,
-        start: "top top"
-      },
-    });
+        scrollTrigger: {
+          trigger: "#exploreContainer",
+          ease: "power3.inOut",
+          pin: false,
+          start: "top top",
+        },
+      }
+    );
 
     // Trigger animations when the exploreContainer2 comes into view
-    gsap.fromTo("#exploreContainer2", {
-      opacity: 0,
-      x: -200,
-      duration: 1,
-    },
-    {
-      opacity: 1,
-      x: 0,
-      delay: 1,
-      scrollTrigger: {
-        trigger: "#exploreContainer2",
-        ease: "power3.inOut",
-        pin: false,
-        start: "bottom bottom"
+    gsap.fromTo(
+      "#exploreContainer2",
+      {
+        opacity: 0,
+        x: -200,
+        duration: 1,
       },
-    });
+      {
+        opacity: 1,
+        x: 0,
+        delay: 1,
+        scrollTrigger: {
+          trigger: "#exploreContainer2",
+          ease: "power3.inOut",
+          pin: false,
+          start: "bottom bottom",
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -115,9 +123,9 @@ export default function Index() {
               Create a team
             </Button>{" "}
           </Row>
-          </Container>
+        </Container>
 
-          <Container id="exploreContainer2" fluid>
+        <Container id="exploreContainer2" fluid>
           <Row id="secondRow">
             <Col id="col1">
               <h2>Gear up for Multiplayer</h2>
@@ -145,6 +153,40 @@ export default function Index() {
             </Col>
           </Row>
         </Container>
+
+        <div className="thirdSection">
+          <h3>Supported games</h3>
+
+          <div className="Cards">
+            <ListGroup variant="flush">
+              <ListGroup.Item variant="dark" className="thumbnail">
+                Find the teammates you've been dreaming of
+              </ListGroup.Item>
+              <ListGroup.Item variant="dark" className="thumbnail">
+                Play in tournaments
+              </ListGroup.Item>
+              <ListGroup.Item variant="dark" className="thumbnail">
+                Fill your lobbies with players you trust
+              </ListGroup.Item>
+              <ListGroup.Item variant="dark" className="thumbnail">
+                Forge new friendships
+              </ListGroup.Item>
+            </ListGroup>
+
+            <Card style={{ width: "18rem" }} id="card">
+              <Card.Img variant="top" src="dota2.jpg" className="cardopacity" />
+              <Button className="thumbnail-button">Learn more</Button>
+            </Card>
+            <Card style={{ width: "18rem" }} id="card">
+              <Card.Img variant="top" src="cs2.jpg"  className="cardopacity"/>
+              <Button className="thumbnail-button">Learn more</Button>
+            </Card>
+            <Card style={{ width: "18rem" }} id="card">
+              <Card.Img variant="top" src="fortnite.jpg" className="cardopacity"/>
+              <Button className="thumbnail-button">Learn more</Button>
+            </Card>
+          </div>
+        </div>
         <Footer />
       </div>
     </>
