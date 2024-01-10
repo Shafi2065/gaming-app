@@ -1,14 +1,20 @@
 import React, { useState } from "react";
+import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import "../app/firebaseAuth";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const handleRegistration = (e) => {
     e.preventDefault();
@@ -32,6 +38,8 @@ function Register() {
           const user = userCredential.user;
           console.log(userCredential);
           setRegistrationSuccess(true);
+          setErrorMessage("");
+          handleShow();
         })
         .catch((error) => {
           console.error(error.code, error.message);
@@ -70,9 +78,22 @@ function Register() {
             <p style={{ color: "green" }}>Successfully Registered</p>
           )}
 
+          <Modal show={show} onHide={handleClose} animation={false}>
+            <Modal.Header>
+              <Modal.Title>Successfully Registered</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Your web page is being redirected in 2 seconds
+            </Modal.Body>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal>
+
           <Button variant="primary" type="submit">
             Submit
           </Button>
+
         </form>
       </fieldset>
     </div>
