@@ -5,8 +5,26 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useState } from "react";
 
 export default function TopNav() {
+  const [isAuthenticated, setIsAuthenticated ] = useState(false);
+
+  const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    setIsAuthenticated(true);
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/auth.user
+    const uid = user.uid;
+    // ...
+  } else {
+    // User is signed out
+    // ...
+  }
+});
+
   return (
     <Navbar id="navbar" collapseOnSelect expand="lg">
       <Container>
@@ -28,7 +46,8 @@ export default function TopNav() {
             <Nav.Link id="navItems" Link href="/Players">
               Search Players
             </Nav.Link>
-            <NavDropdown
+            {isAuthenticated && (
+              <NavDropdown
               id="collapsible-nav-dropdown"
               title={
                 <img
@@ -52,6 +71,7 @@ export default function TopNav() {
                 Deactivate Profile
               </NavDropdown.Item>
             </NavDropdown>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
