@@ -1,163 +1,114 @@
 * {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  padding: 0;
-  display: block;
-  width: 100vw;
-  font-family: sans-serif;
-  font-size: 14px;
-  line-height: 1.4;
-}
-ul {
-  list-style: none;
-  display: flex;
-  padding: 0;
-  margin: 0;
-  gap: 1rem;
-  margin-left: auto;
-  font-size: large;
-}
-#navItems:hover {
-  color: red;
-  text-decoration: underline;
-}
-#navItems:active {
-  color: red;
-}
-.profile-image {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.homeContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-image: url("image.jpg");
-  background-size: cover;
-  height: 50vh;
-}
-.bannerContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-.bannerText {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 5ch;
-  color: white;
-}
-#navbar {
-  margin: 0;
-  padding: 0;
-}
-/* styling for the Navbar Items */
-#navbarTitle {
-  color: white;
-  font-size: 35px;
-}
-#navItems {
-  margin-right: 0.5rem;
-  color: white;
-}
-#collapsible-nav-dropdown {
-  color: white;
-}
-#dropDownItems {
-  color: black;
-}
-#redDropDownItems {
-  color: red;
-}
-/* Explore content on the homepage */
-.exploreContent {
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  text-justify: auto;
-  word-wrap: break-word;
-  justify-content: center;
-  background-color: #161616;
-}
-#exploreContainer {
-  background-color: black;
-  width: 50%;
-  justify-content: center;
-  text-align: center;
-  display: flex;
-  padding: 5vh;
-}
-#exploreContainer2 {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-#secondRow {
-  padding-top: 25vh;
-  width: 100%;
-}
-#col1 {
-  background-color: purple;
-}
-#col2 {
-  background-color: orange;
-}
-#col3 {
-  background-color: aqua;
-}
-.thirdSection {
-  padding: 2rem;
-}
-.thumbnail-button {
-  opacity: 0;
-}
-.card:hover .thumbnail-button {
-opacity: 1;
-transition: opacity 0.3s ease-in-out;
-}
-.thumbnail:hover {
-  background-color: rgb(255, 255, 255);
-}
-.cardopacity:hover {
-  opacity: 0.3;
-  transition: opacity 0.3s ease-in-out;
-}
-/* not actually the cards on homepage, was just too lazy to change div names, change later perhaps */
-.Cards {
-  padding: 0; /* Adjust the padding as needed */
-  margin: 2rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 0;
-}
-
-/* Footer container */
-#footer {
-  background-color: black;
-  margin: 0;
-  padding: 0;
-}
-#footerTitle {
-  display: block;
-  text-align: start;
-  padding-top: 15vh;
-  padding-left: 10vh;
-}
-#footerItems {
-  padding: 0;
-  margin: 0x;
-  padding-bottom: 5rem;
-}
-.custom-divider {
-  border-bottom: 1px solid gray;
-  margin: 0;
-  padding: 0;
-}
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .homepage {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+  }
+  .homepage-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+  #homepage-button {
+    background: rgba(
+      255,
+      255,
+      255,
+      0
+    ); /* Set the alpha channel to 0 for full transparency */
+    border: 2px solid orange;
+    border-radius: 4px;
+    color: white;
+    padding: 14px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+  }
+  
+  .button:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+    transition-duration: 0.4s;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    display: block;
+    width: 100vw;
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  ul {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    gap: 1rem;
+    margin-left: auto;
+    font-size: large;
+  }
+  #navItems:hover {
+    color: red;
+    text-decoration: underline;
+  }
+  #navItems:active {
+    color: red;
+  }
+  .profile-image {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  #navbar {
+    background-color: black;
+    margin: 0;
+    padding: 0;
+  }
+  /* styling for the Navbar Items */
+  #navbarTitle {
+    color: white;
+    font-size: 35px;
+  }
+  #navItems {
+    margin-right: 0.5rem;
+    color: white;
+  }
+  #collapsible-nav-dropdown {
+    color: white;
+  }
+  #dropDownItems {
+    color: black;
+  }
+  #redDropDownItems {
+    color: red;
+  }
+  

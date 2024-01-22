@@ -1,27 +1,28 @@
 "use client";
-import { gsap } from "gsap";
+import React from "react";
+import "../public/style.css";
 import TopNav from "../components/topNav";
 import Footer from "../components/footer";
-import "../public/style.css";
-import "./globals.css";
 import { useState, useEffect } from "react";
-import * as React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "./firebaseAuth";
+import { useRouter } from "next/navigation";
 
-gsap.registerPlugin(ScrollTrigger);
+function BgVideo() {
+  return (
+    <div className="video-container">
+      <video autoPlay loop muted>
+        <source src={"/versus3080p.mp4"} type="video/mp4" />
+      </video>
+      <div className="overlay"></div>
+    </div>
+  );
+}
 
-export default function Index() {
+function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -34,161 +35,31 @@ export default function Index() {
 
     return () => unsubscribe();
   }, []);
-  // Define the timeline for the banner animations
-  useEffect(() => {
-    var t1 = gsap.timeline();
-    var tween = gsap.fromTo(
-      ".bannerText",
-      { opacity: 0, x: -200 },
-      { duration: 2.5, opacity: 1, x: 0 }
-    );
-    var tween2 = gsap.fromTo(
-      ".bannerButton",
-      { opacity: 0 },
-      { duration: 2.5, opacity: 1, delay: 1 }
-    );
-    t1.add(tween);
-    t1.add(tween2);
-  }, []);
 
-  // Define the animations for the explore containers
-  const exploreAnimations = () => {
-    // Trigger animations when the exploreContainer comes into view
-    gsap.fromTo(
-      "#exploreContainer",
-      {
-        opacity: 0,
-        y: -200,
-        duration: 1,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        scrollTrigger: {
-          trigger: "#exploreContainer",
-          ease: "power3.inOut",
-          pin: false,
-          start: "top top",
-        },
-      }
-    );
-
-    // Trigger animations when the exploreContainer2 comes into view
-    gsap.fromTo(
-      "#exploreContainer2",
-      {
-        opacity: 0,
-        x: -200,
-        duration: 1,
-      },
-      {
-        opacity: 1,
-        x: 0,
-        delay: 1,
-        scrollTrigger: {
-          trigger: "#exploreContainer2",
-          ease: "power3.inOut",
-          pin: false,
-          start: "bottom bottom",
-        },
-      }
-    );
+  const handleRedirect = () => {
+    if (isAuthenticated) {
+      router.push("/find-team"); // Replace "/authenticated-page" with your actual authenticated page
+    } else {
+      router.push("/login");
+    }
   };
-
-  useEffect(() => {
-    exploreAnimations();
-  }, []);
-
   return (
-    <>
-      <div className="homeContainer">
-        {isAuthenticated && <TopNav />}
-        <div className="bannerContent">
-          <h1 className="bannerText">Find Your Place.</h1>
-          <Button variant="primary" Link href="/login">
+    <div className="homeContainer">
+      {isAuthenticated && <TopNav />}
+      <div className="homepage">
+        <BgVideo />
+        <div className="homepage-content">
+          <h1>Gaming App</h1>
+          <button
+            id="homepage-button"
+            className="button"
+            onClick={handleRedirect}
+          >
             Explore
-          </Button>{" "}
+          </button>
         </div>
       </div>
-      <div className="exploreContent">
-        <Container id="exploreContainer">
-          <Row>
-            <h2>Gear up for Multiplayer</h2>
-            <p>
-              Be better prepared for online gaming by creating a team with
-              people you select to gear up for competitive gaming or a relaxed
-              session.
-            </p>
-            <Button variant="primary" Link href="/login">
-              Create a team
-            </Button>{" "}
-          </Row>
-        </Container>
-
-        <Container id="exploreContainer2" fluid>
-          <Row id="secondRow">
-            <Col id="col1">
-              <h2>Gear up for Multiplayer</h2>
-              <p>
-                Be better prepared for online gaming by creating a team with
-                people you select to gear up for competitive gaming or a relaxed
-                session.
-              </p>
-            </Col>
-            <Col id="col2">
-              <h2>Gear up for Multiplayer</h2>
-              <p>
-                Be better prepared for online gaming by creating a team with
-                people you select to gear up for competitive gaming or a relaxed
-                session.
-              </p>
-            </Col>
-            <Col md id="col3">
-              <h2>Gear up for Multiplayer</h2>
-              <p>
-                Be better prepared for online gaming by creating a team with
-                people you select to gear up for competitive gaming or a relaxed
-                session.
-              </p>
-            </Col>
-          </Row>
-        </Container>
-
-        <div className="thirdSection">
-          <h3>Supported games</h3>
-
-          <div className="Cards">
-            <ListGroup variant="flush">
-              <ListGroup.Item variant="dark" className="thumbnail">
-                Find the teammates you've been dreaming of
-              </ListGroup.Item>
-              <ListGroup.Item variant="dark" className="thumbnail">
-                Play in tournaments
-              </ListGroup.Item>
-              <ListGroup.Item variant="dark" className="thumbnail">
-                Fill your lobbies with players you trust
-              </ListGroup.Item>
-              <ListGroup.Item variant="dark" className="thumbnail">
-                Forge new friendships
-              </ListGroup.Item>
-            </ListGroup>
-
-            <Card style={{ width: "18rem" }} id="card">
-              <Card.Img variant="top" src="dota2.jpg" className="cardopacity" />
-              <Button className="thumbnail-button">Learn more</Button>
-            </Card>
-            <Card style={{ width: "18rem" }} id="card">
-              <Card.Img variant="top" src="cs2.jpg"  className="cardopacity"/>
-              <Button className="thumbnail-button">Learn more</Button>
-            </Card>
-            <Card style={{ width: "18rem" }} id="card">
-              <Card.Img variant="top" src="fortnite.jpg" className="cardopacity"/>
-              <Button className="thumbnail-button">Learn more</Button>
-            </Card>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    </>
+    </div>
   );
 }
+export default Home;
