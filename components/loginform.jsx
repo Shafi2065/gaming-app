@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Form from "react-bootstrap/Form";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -9,11 +11,13 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import "../app/firebaseAuth";
+import { useRouter } from "next/navigation";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -27,8 +31,14 @@ function Login() {
         Swal.fire({
           title: "Successfully Logged in",
           text: "redirecting to another page",
-          icon: "success"
+          icon: "success",
         });
+      })
+      .then(() => {
+        setTimeout(() => {
+          Swal.close();
+          router.push("/");
+        }, 2000);
       })
       .catch((error) => {
         console.error(error.code, error.message);
@@ -62,36 +72,36 @@ function Login() {
       });
   };
   return (
-    <div className="register-container">
+    <div className="FormDiv">
       <fieldset>
-      <legend className="register-heading">Login</legend>
-      <form className="register" onSubmit={handleLogin}>
-        <label>
-          Enter your email:
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
+        <legend>Login</legend>
+        <Form id="Form" onSubmit={handleLogin}>
+          <label>
+            Enter your email:
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
 
-        <label>
-          Enter your password:
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <p>{errorMessage}</p>
-        </label>
-        <Button variant="primary" type="submit">
+          <label>
+            Enter your password:
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <p>{errorMessage}</p>
+          </label>
+          <Button variant="primary" type="submit">
             Login
           </Button>
-        
+
           <Button variant="primary" type="submit" onClick={googleLogin}>
             Google Sign-in
           </Button>
-      </form>
+        </Form>
       </fieldset>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import "../app/firebaseAuth";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -49,10 +50,10 @@ function Register() {
   };
 
   return (
-    <div className="register-container">
+    <div className="FormDiv">
       <fieldset>
-        <legend className="register-heading">Register</legend>
-        <form className="register" onSubmit={handleRegistration}>
+        <legend>Register</legend>
+        <Form id="Form" onSubmit={handleRegistration}>
           <label>
             Enter your Email:
             <input
@@ -93,8 +94,7 @@ function Register() {
           <Button variant="primary" type="submit">
             Submit
           </Button>
-
-        </form>
+        </Form>
       </fieldset>
     </div>
   );

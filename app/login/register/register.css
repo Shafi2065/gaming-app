@@ -1,71 +1,60 @@
-body, html {
-    background-color: white;
+body {
+    background-color: #1f1f1f;
+    margin: 5rem;
+    padding: 0;
+    color: white;
+  }
+  
+  * {
     margin: 0;
     padding: 0;
-}
-* {
-    font-family: sans-serif;
-}
-.register-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-}
-fieldset {
-    margin: 2em 0;
-    padding: 1em 2em;
-    border: solid 1px black;
-    border-radius: 6px;
-    min-width: 200px;
-}
-
-legend {
-    font-size: 1.25em;
-    padding: 0.25em;
-    color: black;
-}
-
-label {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    color: black;
-}
-
-label:first-of-type {
-    margin-top: 0;
-}
-
-textarea {
-    min-height: 8rem;
-    min-width: 100%;
-    padding: .5rem;
-    border: solid 1px; color: black;
-}
-button {
-    background-color: rgb(38, 245, 34);
-    color: white;
-    text-align: center;
-    padding: 10px 24px;
-    font-family: sans-serif;
-    text-decoration: none;
-    font-size: 16px;
-    margin-bottom: 20px;
-}
-.register {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  #Form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 300px;
-    padding: 50px;
-    margin: 20px;
-}
-
-input {
+    padding: 2rem;
+    margin: 0;
+  }
+  
+  .FormDiv {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    margin: 0;
+  }
+  
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: solid 1px white;
+    border-radius: 6px;
+  }
+  
+  legend {
+    font-size: 2rem;
+    padding: 0;
+    color: white;
+    float: none;
+    width: auto;
+  }
+  label {
+    padding: 1.5rem;
+    display: inline-block;
+  }
+  textarea, input {
     height: 2.5rem;
     background-color: rgb(28, 28, 28);
+    width: 100%;
 }
-
-p {
+  
+  p {
     color: red;
-}
+  }
+  
+  button {
+    margin-top: 2rem;
+    background-color: darkblue; /* Add this line to match the button styling on the second page */
+  }
+  

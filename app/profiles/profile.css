@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+body {
+    background-color: #1F1F1F;
+    color: white;
+    text-align: center;
+    margin: 5rem; 
+}
+#Form {
+display: flex;
+flex-direction: column;
+padding: 2rem;
+margin: 0;
+}
+.FormDiv {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    margin: 0;
+}
+#toggleButton {
+    margin: 2rem;
+}
+#btn-glass.btn-primary {
+    background-color: darkblue;
+}
+#toggleButton > .btn-outline-primary:checked {
+    background-color: aqua;
+}
+#toggleButton > .btn-outline-primary:active {
+    background-color: red;
+}
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: solid 1px white;
+    border-radius: 6px;
+}
+
+legend {
+    font-size: 2rem;
+    padding: 0;
+    color: white;
+    float: none;
+    width: auto;
+}
+button {
+    margin-top: 2rem;
+}
