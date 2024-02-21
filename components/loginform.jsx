@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
+
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -44,33 +45,6 @@ function Login() {
         console.error(error.code, error.message);
       });
   };
-
-  const googleLogin = () => {
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider();
-    signInWithRedirect(auth, provider);
-    getRedirectResult(auth)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access Google APIs.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-
-        // The signed-in user info.
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
-  };
   return (
     <div className="FormDiv">
       <fieldset>
@@ -96,10 +70,6 @@ function Login() {
           </label>
           <Button variant="primary" type="submit">
             Login
-          </Button>
-
-          <Button variant="primary" type="submit" onClick={googleLogin}>
-            Google Sign-in
           </Button>
         </Form>
       </fieldset>

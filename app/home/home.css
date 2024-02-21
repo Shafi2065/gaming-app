@@ -1,0 +1,159 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+.main-content {
+  text-align: center;
+  background-color: #1f1f1f;
+  color: white;
+  padding-top: 20em;
+  padding-bottom: 10em;
+  border-bottom: 1px solid gray;
+}
+.heading {
+  margin-bottom: 30px;
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  justify-content: center;
+}
+.subtext {
+  display: flex;
+  justify-content: center;
+}
+#Buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.carousel-item img {
+  opacity: 0.8; /* Adjust the opacity value as needed */
+}
+.carousel-caption {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+.card-text {
+  font-size: large;
+  font-weight: bold;
+  padding-top: 10px;
+}
+.card-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+#TeamCard {
+  height: 400px;
+  width: 300px;
+  background-color: rgba(255, 255, 255, 0.949);
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 5px 0 rgba(128, 128, 128, 0.908);
+  margin-right: 2em;
+}
+#LiveGameCards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 180px;
+  width: 600px;
+  margin: 5em;
+}
+#LiveGameDiv {
+  display: flex;
+  justify-content: center;
+}
+#LiveTag {
+  background-color: black;
+}
+.card:hover {
+  transform: scale(1.05);
+}
+.emoji {
+  padding-top: 100px;
+  margin-right: 10px;
+}
+#card-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+.highlighted-word {
+  background-color: rgb(255, 136, 0);
+  font-weight: bold;
+  /* font-family: roboto system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, 
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
+}
+.Primary-button {
+  background-color: black;
+  padding: 14px 40px;
+  margin: 2rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+.Secondary-button {
+  background-color: white;
+  color: black;
+  padding: 14px 40px;
+  margin: 2rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+.second-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #1f1f1f;
+  padding: 5em;
+}
+.third-content {
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #1f1f1f;
+  padding-top: 20em;
+  padding-bottom: 10em;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+}
+.fourth-content {
+  color: white;
+  background-color: #1f1f1f;
+  display: flex;
+  justify-content: center;
+  padding-top: 5em;
+  padding-bottom: 200px;
+}
+.carousel img {
+  width: 500px;
+  height: 500px;
+}
+#Card-Container {
+  margin-top: 5em;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5em;
+}
+.second-content .buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10em;
+}
+.second-content .buttons-container button {
+  margin-bottom: 1em;
+}
+.Carousel-button {
+  padding: 14px 40px;
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: gray;
+  font-family: "Montserrat-Black";
+  font-weight: 700;
+}
+.Carousel-button.active {
+  background-color: black;
+  opacity: 1;
+  cursor: pointer;
+}

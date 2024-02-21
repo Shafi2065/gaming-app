@@ -1,34 +1,54 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebaseAuth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Loading from "../../loading";
+import getUserProfile from "@/app/ProfileDataFetch";
 
 export default function UserProfilePage() {
-  const [userProfiles, setUserProfiles] = useState([]);
-  const [loading, setLoading] = useState(false);
-  
-  const getProfiles = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "profiles"));
-      const profiles = querySnapshot.docs.map((doc) => doc.data());
-      setUserProfiles(profiles);
-      console.log(userProfiles);
-    } catch (error) {
-      console.log("Error getting profile data", error);
-    }
-  };
+  const [loading, setLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
-    getProfiles();
+    const auth = getAuth();
+    const fetchData = async () => {
+      try {
+        const userProfileData = await getUserProfile();
+        console.log("userProfileData: ", userProfileData);
+        if (userProfileData) {
+          setUserProfile(userProfileData);
+          console.log(
+            "User Profile is: ",
+            userProfileData.userID,
+            userProfileData.displayName
+          );
+        } else {
+          console.log("User profile not found");
+        }
+      } catch (error) {
+        console.log("Error fetching profile", error, error.code);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchData();
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   return (
     <>
-      {userProfiles.map((profile) => (
-        <div key={profile.displayName}>
-          <h1>{profile.displayName}</h1>
+      {loading && <Loading />}
+      {!loading && (
+        <div>
+          <h1>{userProfile?.displayName}</h1>
+          <h3>You like to play on {userProfile?.playTimes}</h3>
         </div>
-      ))}
+      )}
     </>
   );
 }
