@@ -5,8 +5,8 @@ import { db } from "./firebaseAuth";
 export default async function getUserProfile() {
   const auth = getAuth();
   const user = auth.currentUser;
-  //ToDo get the authenticated user and then get their display name
-  // that is stored in their cloud firestore profiles document
+  //ToDo get the authenticated user and then get their profile data
+  // which is stored in their cloud firestore profiles document
   if (user) {
     try {
       const userId = user.uid; // create a variable that holds the individual user based on their userID
@@ -18,7 +18,7 @@ export default async function getUserProfile() {
       if (!querySnapshot.empty) {
         const userProfile = querySnapshot.docs[0].data(); // Access the data within the document snapshot
         console.log("User's display Name is: ", userProfile.displayName);
-        return userProfile; // allows us to call the function from elsewhere and get the userdata
+        return userProfile // allows us to call the function from elsewhere and get the profile data as well as owner of page
       } else {
         console.log("Profile does not exist");
         return null; // returns nothing

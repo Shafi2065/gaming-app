@@ -14,12 +14,8 @@ body {
   flex-direction: column;
   padding: 2rem;
   margin: 0;
-  opacity: 0;
-  transition: opacity 2s ease-in-out;
 }
-#Form.visible {
-  opacity: 1;
-}
+
 .FormDiv {
   display: flex;
   align-items: center;
@@ -54,4 +50,15 @@ button {
 }
 label {
   color: white;
+}
+.hover-move-up {
+  display: block;
+  transition: transform 0.5s;
+  padding-right: 1rem;
+}
+.hover-move-up:hover {
+  transform: translateY(-5px);
+}
+a.hover-move-up .Active {
+  border: 2px solid blue;
 }
