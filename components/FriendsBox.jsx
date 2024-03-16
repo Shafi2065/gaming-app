@@ -1,4 +1,4 @@
-import "../app/pages/profiles/[displayName]/style.css"
+import "../app/pages/profiles/[docId]/style.css"
 export default function FriendsBox() {
   return (
     <div className="friend-container">

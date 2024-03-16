@@ -2,7 +2,7 @@ import Card from "react-bootstrap/Card";
 import CardImg from "react-bootstrap/CardImg";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "../app/pages/profiles/[displayName]/style.css";
+import "../app/pages/profiles/[docId]/style.css";
 
 export default function GameCard() {
   return (
