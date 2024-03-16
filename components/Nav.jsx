@@ -7,7 +7,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import getUserProfile from "@/app/ProfileDataFetch";
+import getUserProfile from "@/app/GetFiles/ProfileDataFetch";
 
 export default function ColourNav() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { db } from "./firebaseAuth";
+import { db } from "../firebaseAuth";
 
 export default async function getUserProfile() {
   const auth = getAuth();

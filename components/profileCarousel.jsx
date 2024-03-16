@@ -1,6 +1,6 @@
 import React from "react";
 import Carousel from "react-bootstrap/Carousel";
-import "../app/home/home.css";
+import "../app/pages/home/home.css";
 
 export default function NextCarousel() {
     return (

@@ -5,7 +5,7 @@ import TopNav from "@/components/topNav";
 import ComponentCard from "@/components/card";
 import ComponentCarousel from "@/components/carousel";
 import NextCarousel from "@/components/profileCarousel";
-import "../firebaseAuth";
+import "../../firebaseAuth";
 import "./home.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -13,11 +13,12 @@ import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
 import { useState } from "react";
 import LiveGameCards from "@/components/livegamecard";
+import ColourNav from "@/components/Nav";
 
 export default function Home() {
   return (
     <div>
-      <TopNav />
+      <ColourNav/>
       <div className="main-content">
         <Container fluid>
           <Row>

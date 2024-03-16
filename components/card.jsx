@@ -2,7 +2,7 @@ import Card from "react-bootstrap/Card";
 import CardImg from "react-bootstrap/CardImg";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "../app/home/home.css";
+import "../app/pages/home/home.css";
 
 export default function ComponentCard() {
   return (

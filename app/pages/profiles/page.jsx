@@ -1,13 +1,12 @@
 "use client";
 import * as React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { ToggleButtonGroup, ToggleButton, Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useEffect } from "react";
-import createProfile from "./userProfiles";
+import createProfile from "./CreateProfile";
 import { useState } from "react";
 import "./profile.css";
 import { useRouter } from "next/navigation";
@@ -42,6 +41,8 @@ export default function userProfile() {
   const CasualPlayer = "Casual Player";
   const CompetitivePlayer = "Competitve Player";
 
+  const imageUrl =
+    "https://firebasestorage.googleapis.com/v0/b/gaming-app-83a01.appspot.com/o/ProfileImages%2FProfile3.jpg?alt=media&token=b9ed2379-7631-4fb3-8500-87b81d4d6e88";
   const [value, setValue] = useState([Playstation, PC, Nintendo]);
   const [PlayTimesvalue, setPlayTimesValue] = useState([
     Morning,
@@ -105,7 +106,14 @@ export default function userProfile() {
         throw new Error("Error Creating Profile");
       }
 
-      await createProfile(displayName, platform, playTimes, Tags, gameImages);
+      await createProfile(
+        displayName,
+        platform,
+        playTimes,
+        Tags,
+        gameImages,
+        imageUrl
+      );
 
       Swal.fire({
         title: "Profile Successfully Created",
@@ -145,14 +153,11 @@ export default function userProfile() {
 
   return (
     <>
-      <ProfileStepper registrationCompleted={true}/>
+      <ProfileStepper registrationCompleted={true} />
       <div className="FormDiv">
         <fieldset>
           <legend>Create a Profile</legend>
-          <Form
-            onSubmit={handleSubmit}
-            id="Form"
-          >
+          <Form onSubmit={handleSubmit} id="Form">
             {questionIndex === 0 && (
               <>
                 <p>{currentQuestion.label}</p>
@@ -271,14 +276,18 @@ export default function userProfile() {
             )}
             {questionIndex === 4 && (
               <>
-              <p>{currentQuestion.label}</p>
-                <div class="row-md-6" data-shuffle="item" data-groups="bag,box">
+                <p>{currentQuestion.label}</p>
+                <div
+                  className="row-md-6"
+                  data-shuffle="item"
+                  data-groups="bag,box"
+                >
                   <Row>
                     <Col>
                       <a class="hover-move-up" href="#">
                         <Image
                           className={activeImage === "Fortnite" ? "Active" : ""}
-                          src="Fortnite.jpg"
+                          src="/Fortnite.jpg"
                           alt="Fortnite"
                           width="200"
                           height="150"
@@ -288,16 +297,16 @@ export default function userProfile() {
                           }}
                           style={{ cursor: "pointer" }}
                         />
-                        </a>
-                        <h5 class="mb-0 text-lightest text-uppercase">
-                          Fortnite
-                        </h5>
+                      </a>
+                      <h5 class="mb-0 text-lightest text-uppercase">
+                        Fortnite
+                      </h5>
                       <a class="hover-move-up" href="#">
                         <Image
                           className={
                             activeImage === "Apex Legends" ? "Active" : ""
                           }
-                          src="Apex Legends.jpg"
+                          src="/Apex Legends.jpg"
                           alt="Apex Legends"
                           width="200"
                           height="150"
@@ -307,16 +316,16 @@ export default function userProfile() {
                           }}
                           style={{ cursor: "pointer" }}
                         />
-                        </a>
-                        <h5 class="mb-0 text-lightest text-uppercase">
-                          Apex Legends
-                        </h5>
+                      </a>
+                      <h5 class="mb-0 text-lightest text-uppercase">
+                        Apex Legends
+                      </h5>
                     </Col>
                     <Col>
                       <a class="hover-move-up" href="#">
                         <Image
                           className={activeImage === "Dota 2" ? "Active" : ""}
-                          src="dota 2.jpg"
+                          src="/dota 2.jpg"
                           alt="Dota 2"
                           width="200"
                           height="150"
@@ -326,10 +335,8 @@ export default function userProfile() {
                           }}
                           style={{ cursor: "pointer" }}
                         />
-                        </a>
-                        <h5 class="mb-0 text-lightest text-uppercase">
-                          Dota 2
-                        </h5>
+                      </a>
+                      <h5 class="mb-0 text-lightest text-uppercase">Dota 2</h5>
                       <a class="hover-move-up" href="#">
                         <Image
                           className={
@@ -337,7 +344,7 @@ export default function userProfile() {
                               ? "Active"
                               : ""
                           }
-                          src="warzone.jpg"
+                          src="/warzone.jpg"
                           alt="Call of Duty: Warzone"
                           width="200"
                           height="150"
