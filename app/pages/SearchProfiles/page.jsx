@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import GetAllProfiles from "./getAllProfiles";
 import Link from "next/link";
@@ -19,11 +19,10 @@ export default function ProfileSearch() {
       <Table striped bordered hover>
         <thead>
           <tr>
+            <th>Profile Picture</th>
             <th>#</th>
-            <th>Logo</th>
             <th>Display Name</th>
             <th>Document ID</th>
-            <th>Profile Link</th>
           </tr>
         </thead>
         <tbody>
@@ -33,11 +32,10 @@ export default function ProfileSearch() {
                <img src={profile.imageUrl} alt="Profile Image" width="50" height="50" />
               </td>
               <td>{index + 1}</td>
-              <td>{profile.displayName}</td>
+              <td> 
+              <Link href={`profiles?docId=/${profile.id}`}>{profile.displayName}</Link>
+                </td>
               <td>{profile.id}</td>
-              <td>
-                <Link href={`/profile/${profile.id}`}>View Profile</Link>
-              </td>
             </tr>
           ))}
         </tbody>

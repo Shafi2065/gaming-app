@@ -4,7 +4,7 @@ import {
   updateDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "../../firebaseAuth";
+import { db } from "../../../firebaseAuth";
 import { getAuth } from "firebase/auth";
 
 async function createProfile(

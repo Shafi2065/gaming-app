@@ -11,7 +11,8 @@ import getUserProfile from "@/app/GetFiles/ProfileDataFetch";
 
 export default function ColourNav() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userProfile, setUserProfile] = useState(null)
+  const [userProfile, setUserProfile] = useState(null);
+  const [docId, setDocId] = useState(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -22,8 +23,11 @@ export default function ColourNav() {
         try {
           const profileData = await getUserProfile();
           setUserProfile(profileData);
-        } catch(error) {
-          console.log("Error fetching profile", error, error.code)
+          setDocId(profileData.docId);
+          console.log("User profile found", profileData);
+          console.log("docId is", profileData.docId);
+        } catch (error) {
+          console.log("Error fetching profile", error, error.code);
         }
         // Check if profile exists
         // User is signed in, see docs for a list of available properties
@@ -73,18 +77,21 @@ export default function ColourNav() {
               <NavDropdown
                 id="collapsible-nav-dropdown"
                 title={
-                  <img
-                    src="/default-profile.png"
-                    className="profile-image"
-                  />
+                  <img src="/default-profile.png" className="profile-image" />
                 }
               >
-                 <NavDropdown.Item id="dropDownItems">
-                 Welcome, {userProfile ? userProfile.displayName : "Loading..."}
+                <NavDropdown.Item id="dropDownItems">
+                  Welcome,{" "}
+                  {userProfile ? userProfile.displayName : "Loading..."}
                 </NavDropdown.Item>
-                <NavDropdown.Item id="dropDownItems" href="./profiles/[usernames]">
-                  My Profile
-                </NavDropdown.Item>
+                {isAuthenticated && userProfile && userProfile.docId && (
+                  <NavDropdown.Item
+                    id="dropDownItems"
+                    href={`./profiles?docId=${docId}`}
+                  >
+                    My Profile
+                  </NavDropdown.Item>
+                )}
                 <NavDropdown.Item id="dropDownItems" href="#action/3.2">
                   My Teams
                 </NavDropdown.Item>

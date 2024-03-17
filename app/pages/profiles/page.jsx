@@ -1,388 +1,235 @@
 "use client";
-import * as React from "react";
-import { ToggleButtonGroup, ToggleButton, Container } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
+import { useSearchParams } from 'next/navigation'
+import React, { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Loading from "@/app/loading";
+import getUserProfile from "@/app/GetFiles/ProfileDataFetch";
 import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
+import FriendsBox from "@/components/FriendsBox";
+import MessageTable from "@/components/MessageTable";
 import Row from "react-bootstrap/Row";
-import { useEffect } from "react";
-import createProfile from "./CreateProfile";
-import { useState } from "react";
-import "./profile.css";
-import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
-import { ProfileStepper } from "@/components/Stepper";
-import Image from "react-bootstrap/Image";
+import Button from "react-bootstrap/Button";
+import "./style.css";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import UploadImage from "@/app/cloudImageStorage";
+import updateProfile from "@/app/updateProfile";
+import ColourNav from "@/components/Nav";
+import GameCard from "@/components/gameCard";
+import { sendFriendRequest } from "@/app/FriendRequests";
 
-export default function userProfile() {
-  const [displayName, setDisplayName] = useState("");
-  const [platform, setPlatform] = useState("");
-  const [playTimes, setPlayTimes] = useState("");
-  const [Tags, setTags] = useState("");
-  const [gameImages, setGameImages] = useState();
-  const [activeImage, setActiveImage] = useState(null);
+import { useQuery } from "@tanstack/react-query";
+import GetProfileByDocID from "@/app/GetFiles/ProfileFetchByDocID";
 
-  const router = useRouter();
-  const [formStarted, setFormStarted] = useState(false);
+export default function UserProfilePage() {
+  const [key, setKey] = useState("home");
+  const [Hover, setHover] = useState(false);
+  const [isProfileOwner, setIsProfileOwner] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState(null);
 
-  const [error, setError] = useState(null);
+  const defaultImageUrl = "/Create a team.jpg";
+  const searchParams = useSearchParams()
 
-  const Playstation = "Playstation";
-  const Nintendo = "Nintendo";
-  const PC = "PC";
-
-  const Morning = "Morning";
-  const Afternoon = "Afternoon";
-  const Evenings = "Evenings";
-  const LateNight = "LateNight";
-
-  const Parent = "Parent";
-  const Student = "Student";
-  const CasualPlayer = "Casual Player";
-  const CompetitivePlayer = "Competitve Player";
-
-  const imageUrl =
-    "https://firebasestorage.googleapis.com/v0/b/gaming-app-83a01.appspot.com/o/ProfileImages%2FProfile3.jpg?alt=media&token=b9ed2379-7631-4fb3-8500-87b81d4d6e88";
-  const [value, setValue] = useState([Playstation, PC, Nintendo]);
-  const [PlayTimesvalue, setPlayTimesValue] = useState([
-    Morning,
-    Afternoon,
-    Evenings,
-    LateNight,
-  ]);
-  const [tagsValue, setTagsValue] = useState([
-    Parent,
-    Student,
-    CasualPlayer,
-    CompetitivePlayer,
-  ]);
-
-  // ToDo Sets a variable to the questions array that holds
-  // the questions and is assigned the hook that holds the index of the questions
-  const questions = [
-    {
-      label: "Enter a display name:",
-      value: displayName,
-      setter: setDisplayName,
-    },
-    {
-      label: "What platforms do you play on? Select multiple if they apply:",
-      value: platform,
-      setter: setPlatform,
-    },
-    {
-      label: "When do you usually play? Select multiple if they apply:",
-      value: playTimes,
-      setter: setPlayTimes,
-    },
-    {
-      label: "Select all tags that apply: Select multiple if they apply:",
-      value: Tags,
-      setter: setTags,
-    },
-    {
-      label: "Select the game you want to find a team for:",
-      value: gameImages,
-      setter: setGameImages,
-    },
-    {
-      buttons: <></>,
-    },
-  ];
-  const [questionIndex, setQuestionIndex] = useState(0);
-
-  const currentQuestion = questions[questionIndex];
-
-  const handleNext = () => {
-    setQuestionIndex((questionIndex) => questionIndex + 1);
-  };
-  const handlePrevious = () => {
-    setQuestionIndex((questionIndex) => questionIndex - 1);
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (!displayName || !platform || !playTimes || !Tags || !gameImages) {
-        throw new Error("Error Creating Profile");
-      }
-
-      await createProfile(
-        displayName,
-        platform,
-        playTimes,
-        Tags,
-        gameImages,
-        imageUrl
-      );
-
-      Swal.fire({
-        title: "Profile Successfully Created",
-        text: "redirecting to your profile",
-        icon: "success",
-      });
-
-      setTimeout(() => {
-        Swal.close();
-        router.push("/");
-      }, 2000);
-    } catch (error) {
-      console.log("Error creating profile", error, error.code);
-
-      setError("Error Creating Profile: empty fields are not allowed");
-    }
-  };
-
-  const handleChange = (val) => {
-    setValue(val);
-    setPlatform(val);
-  };
-  const handlePlayChange = (PlayTimesvalue) => {
-    setPlayTimesValue(PlayTimesvalue);
-    setPlayTimes(PlayTimesvalue);
-  };
-  const handleTagChange = (tagsValue) => {
-    setTagsValue(tagsValue);
-    setTags(tagsValue);
-  };
-
+  const docId = searchParams.get("docId")
+  console.log("docId is", docId)
+  const auth = getAuth();
+  const user = auth.currentUser;
+  console.log("User is", user);
+  
   useEffect(() => {
-    setTimeout(() => {
-      setFormStarted(true);
-    }, 100);
+    const fetchData = async () => {
+      try {
+        const userProfileData = await GetProfileByDocID(docId);
+        if (userProfileData) {
+          setUserProfile(userProfileData);
+          console.log("User profile found", userProfileData);
+        } else {
+          console.log("User profile not found");
+        }
+      } catch (error) {
+        console.log("Error fetching profile", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+      fetchData();
   }, []);
 
+  const handleFileChange = (e) => {
+    if (e.target.files[0]) {
+      UploadImage(e.target.files[0], async (imageUrl) => {
+        setUserProfile((prevProfile) => ({ ...prevProfile, imageUrl }));
+        if (isProfileOwner) {
+          await updateProfile(userId, { imageUrl });
+        }
+      });
+    }
+  };
+  const handleFriendRequest = async (userId) => {
+    if (!userId) {
+      console.log("Receiver userID is not available");
+      return;
+    }
+    try {
+      await sendFriendRequest(userId);
+      console.log("Friend Request sent successfully");
+    } catch (error) {
+      console.log("Error sending Friend Request", error, error.code);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-    <>
-      <ProfileStepper registrationCompleted={true} />
-      <div className="FormDiv">
-        <fieldset>
-          <legend>Create a Profile</legend>
-          <Form onSubmit={handleSubmit} id="Form">
-            {questionIndex === 0 && (
-              <>
-                <p>{currentQuestion.label}</p>
-                <Row>
-                  <Col>
-                    <Form.Control
-                      aria-describedby="displayHelp"
-                      placeholder="Display Name"
-                      value={displayName}
-                      onChange={(e) => {
-                        setDisplayName(e.target.value);
+    <div>
+      {loading && <Loading />}
+      {!loading && (
+        <div id="ProfileBanner">
+          <Container fluid>
+            <ColourNav />
+            <Row>
+              <Col xs={2}>
+                <div style={{ position: "relative", display: "inline-block" }}>
+                  <img
+                    src={userProfile.imageUrl || defaultImageUrl}
+                    onMouseEnter={() => setHover(true)}
+                    onMouseLeave={() => setHover(false)}
+                    onClick={() => {
+                      // Trigger the file input when the image is clicked
+                      document.getElementById("fileInput")?.click();
+                    }}
+                    style={{ width: "100%" }}
+                    className={Hover ? `hover` : ""}
+                  />
+                  {/* Hidden file input */}
+                  <input
+                    id="fileInput"
+                    type="file"
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                  />
+                  {Hover && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        backgroundColor: "rgba(0, 0, 0, 0.7)",
+                        color: "white",
+                        padding: "10px",
+                        borderRadius: "5px",
                       }}
-                    />
-                    <Form.Text id="displayHelp">
-                      Your display name will be used across the website,
-                      different from username which is only used for logging
-                      back into the website.
-                    </Form.Text>
-                  </Col>
-                </Row>
-                <Button onClick={handleNext}>Next</Button>
-              </>
-            )}
-            {questionIndex === 1 && (
-              <>
-                <p>{currentQuestion.label}</p>
-                <Row>
-                  <Col>
-                    <ToggleButtonGroup
-                      type="checkbox"
-                      value={platform}
-                      onChange={handleChange}
-                      aria-required
                     >
-                      <ToggleButton id="tbg-btn-1" value={Playstation}>
-                        Playstation
-                      </ToggleButton>
-                      <ToggleButton id="tbg-btn-2" value={Nintendo}>
-                        Nintendo
-                      </ToggleButton>
-                      <ToggleButton id="tbg-btn-3" value={PC}>
-                        PC
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                  </Col>
-                </Row>
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
-                </Button>
-                <Button className="Primary-button" onClick={handleNext}>
-                  Submit
-                </Button>
-              </>
-            )}
-            {questionIndex === 2 && (
-              <>
-                <p>{currentQuestion.label}</p>
-                <Row>
-                  <Col>
-                    <ToggleButtonGroup
-                      type="checkbox"
-                      value={playTimes}
-                      onChange={handlePlayChange}
-                    >
-                      <ToggleButton id="tbg-btn-1" value={Morning}>
-                        Mornings
-                      </ToggleButton>
-                      <ToggleButton id="tbg-btn-2" value={Afternoon}>
-                        Afternoon
-                      </ToggleButton>
-                      <ToggleButton id="tbg-btn-3" value={Evenings}>
-                        Evenings
-                      </ToggleButton>
-                      <ToggleButton id="tbg-btn-4" value={LateNight}>
-                        Late Nights
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                  </Col>
-                </Row>
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
-                </Button>
-                <Button onClick={handleNext}>Submit</Button>
-              </>
-            )}
-            {questionIndex === 3 && (
-              <>
-                <p>{currentQuestion.label}</p>
-                <Row>
-                  <Col>
-                    <ToggleButtonGroup
-                      type="checkbox"
-                      value={Tags}
-                      onChange={handleTagChange}
-                    >
-                      <ToggleButton id="tbg-btn-1" value={Parent}>
-                        Parent
-                      </ToggleButton>
-                      <ToggleButton id="tbg-btn-2" value={Student}>
-                        Student
-                      </ToggleButton>
-                      <ToggleButton id="tbg-btn-3" value={CasualPlayer}>
-                        Casual Player
-                      </ToggleButton>
-                      <ToggleButton id="tbg-btn-4" value={CompetitivePlayer}>
-                        Competitive Player
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                  </Col>
-                </Row>
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
-                </Button>
-                <Button onClick={handleNext}>Submit</Button>
-              </>
-            )}
-            {questionIndex === 4 && (
-              <>
-                <p>{currentQuestion.label}</p>
-                <div
-                  className="row-md-6"
-                  data-shuffle="item"
-                  data-groups="bag,box"
-                >
-                  <Row>
-                    <Col>
-                      <a class="hover-move-up" href="#">
-                        <Image
-                          className={activeImage === "Fortnite" ? "Active" : ""}
-                          src="/Fortnite.jpg"
-                          alt="Fortnite"
-                          width="200"
-                          height="150"
-                          onClick={() => {
-                            setActiveImage("Fortnite");
-                            setGameImages("Fortnite");
-                          }}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </a>
-                      <h5 class="mb-0 text-lightest text-uppercase">
-                        Fortnite
-                      </h5>
-                      <a class="hover-move-up" href="#">
-                        <Image
-                          className={
-                            activeImage === "Apex Legends" ? "Active" : ""
-                          }
-                          src="/Apex Legends.jpg"
-                          alt="Apex Legends"
-                          width="200"
-                          height="150"
-                          onClick={() => {
-                            setActiveImage("Apex Legends");
-                            setGameImages("Apex Legends");
-                          }}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </a>
-                      <h5 class="mb-0 text-lightest text-uppercase">
-                        Apex Legends
-                      </h5>
-                    </Col>
-                    <Col>
-                      <a class="hover-move-up" href="#">
-                        <Image
-                          className={activeImage === "Dota 2" ? "Active" : ""}
-                          src="/dota 2.jpg"
-                          alt="Dota 2"
-                          width="200"
-                          height="150"
-                          onClick={() => {
-                            setActiveImage("Dota 2");
-                            setGameImages("Dota 2");
-                          }}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </a>
-                      <h5 class="mb-0 text-lightest text-uppercase">Dota 2</h5>
-                      <a class="hover-move-up" href="#">
-                        <Image
-                          className={
-                            activeImage === "Call of Duty: Warzone"
-                              ? "Active"
-                              : ""
-                          }
-                          src="/warzone.jpg"
-                          alt="Call of Duty: Warzone"
-                          width="200"
-                          height="150"
-                          onClick={() => {
-                            setActiveImage("Call of Duty: Warzone");
-                            setGameImages("Call of Duty: Warzone");
-                          }}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </a>
-                      <span class="hover-move-up">
-                        <h5 class="mb-0 text-lightest text-uppercase">
-                          Call of Duty: Warzone
-                        </h5>
-                      </span>
-                    </Col>
-                  </Row>
+                      <h2>Test</h2>
+                    </div>
+                  )}
                 </div>
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
-                </Button>
-                <Button onClick={handleNext}>Submit</Button>
-              </>
-            )}
-
-            {questionIndex === 5 && (
-              <>
-                <p>Finalize your profile or go back</p>
-                {error && <h3>{error}</h3>}
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
-                </Button>
-                <Button type="submit">Create Profile</Button>
-              </>
-            )}
-          </Form>
-        </fieldset>
+              </Col>
+              <Col xs={3}>
+                <h3 style={{ fontWeight: "600" }} className="profileName">
+                  {userProfile.displayName}
+                </h3>
+                <h3 style={{ fontWeight: "600" }} className="profileName">
+                  Member since {userProfile.today}
+                </h3>
+                <p id="profileBio">{userProfile.bio}</p>
+              </Col>
+              <Col xs={2} id="buttonColumn">
+                {!isProfileOwner && (
+                  <>
+                    <Button className="Friend-button">
+                      Send Friend Request
+                    </Button>
+                    <Button className="Message-button">Send a message</Button>
+                    <Button className="Report-button">Report Player</Button>
+                  </>
+                )}
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      )}
+      <div id="SecondSection">
+        <Tabs
+          id="profileTab"
+          activeKey={key}
+          onSelect={(k) => setKey(k)}
+          className="mb-3"
+          fill
+        >
+          <Tab eventKey="home" title="Home">
+            <div className="text-center">
+              <h3>Favourite Games</h3>
+              <div className="card-container">
+                <GameCard />
+              </div>
+            </div>
+          </Tab>
+          <Tab eventKey="friends" title="Friends">
+            <div id="FriendsSection">
+              <h3>Friends List</h3>
+              <FriendsBox />
+            </div>
+          </Tab>
+          {isProfileOwner && (
+            <Tab eventKey="messages" title="Messages">
+              <MessageTable />
+            </Tab>
+          )}
+          <Tab eventKey="videos" title="Videos">
+            Tab content for Contact
+          </Tab>
+          <Tab eventKey="feed" title="Feed">
+            Tab content for Contact
+          </Tab>
+        </Tabs>
       </div>
-    </>
+    </div>
   );
+}
+{
+  /* <div id="SecondSection">
+            <Row>
+              <Col>
+                <Tabs
+                  id="profileTab"
+                  activeKey={key}
+                  onSelect={(k) => setKey(k)}
+                  className="mb-3"
+                >
+                  <Tab eventKey="home" title="Home">
+                    <Row>
+                      <Col>
+                        <h3>Favourite Games</h3>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <ComponentCard />
+                    </Row>
+                  </Tab>
+                  <Tab eventKey="friends" title="Friends">
+                    Tab content for Profile
+                  </Tab>
+                  <Tab eventKey="messages" title="Messages">
+                    Tab content for Contact
+                  </Tab>
+                  <Tab eventKey="videos" title="Videos">
+                    Tab content for Contact
+                  </Tab>
+                  <Tab eventKey="Feed" title="Feed">
+                    Tab content for Contact
+                  </Tab>
+                </Tabs>
+                <p>Additional content under the tab menu near the top</p>
+              </Col>
+              <Col className="text-end" id="SideContent">
+                <h6>Social Media</h6>
+                <h6>Discord</h6>
+                <h6>Facebook</h6>
+              </Col>
+            </Row>
+          </div> */
 }
