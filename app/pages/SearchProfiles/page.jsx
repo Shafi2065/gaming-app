@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
-import GetAllProfiles from "./getAllProfiles";
+import GetAllProfiles from "../../GetFiles/getAllProfiles";
 import Link from "next/link";
+import ColourNav from "@/components/Nav";
 
 export default function ProfileSearch() {
   const [profiles, setProfiles] = useState([]);
@@ -15,6 +16,7 @@ export default function ProfileSearch() {
   }, []);
   return (
     <div>
+      <ColourNav />
       <h1>Profile Search</h1>
       <Table striped bordered hover>
         <thead>

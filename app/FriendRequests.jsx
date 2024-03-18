@@ -1,9 +1,8 @@
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { doc, runTransaction, collection, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "./firebaseAuth";
 
-// This function should ideally take the receiver's user ID or display name as an argument
-export async function sendFriendRequest(receiverUserId) {
+export async function sendFriendRequest(receiverId) {
   const auth = getAuth();
   const user = auth.currentUser;
 
@@ -11,26 +10,31 @@ export async function sendFriendRequest(receiverUserId) {
     console.error("User is not logged in");
     return;
   }
+  // Construct a unique document ID for the friend request
+  const friendRequestId = `${user.uid}_${receiverId}`;
 
-  // Assuming `receiverUserId` is the UID of the user receiving the friend request
+  // Reference to the specific friend request document using the unique ID
+  const friendRequestDocRef = doc(db, "friendRequests", user.uid, receiverId);
+
+  console.log(`Sender ID: ${user.uid}, Receiver ID: ${receiverId}`);
+
   try {
-    // Adding the friend request to the sender's subcollection
-    await addDoc(collection(db, `profiles/${user.uid}/friendRequests`), {
-      senderId: user.uid, // Current user's ID
-      receiverId: receiverUserId,
-      pending: "Pending",
-      timestamp: new Date(), // You can use serverTimestamp() if you prefer
+    await runTransaction(db, async (transaction) => {
+      const docSnap = await transaction.get(friendRequestDocRef);
+      if (docSnap.exists()) {
+        console.log("Friend request already exists");
+        return;
+      }
+      const docRef = await addDoc(collection(db, "friendRequests"), {
+        senderId: user.uid,
+        receiverId,
+        status: "pending",
+        createdAt: serverTimestamp(),
+      });
+      console.log("Friend request sent", docRef.id);
+      return true;
     });
-
-    await addDoc(collection(db, `profiles/${receiverUserId}/friendRequests`), {
-      senderId: user.uid,
-      receiverId: receiverUserId,
-      pending: "Pending",
-      timestamp: new Date(), // Or serverTimestamp()
-    });
-
-    console.log("Friend request sent successfully.");
   } catch (error) {
-    console.error("Could not send the friend request", error);
+    console.error("Error sending friend request: ", error, error.code);
   }
 }

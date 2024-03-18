@@ -7,7 +7,7 @@ export default function LiveGameCards() {
       <Card id="LiveGameCards">
         <Row>
           <Col md={3}>
-            <Card.Img src="Create a team.jpg" style={{ marginTop: "6px" }} />
+            <Card.Img src="/Create a team.jpg" style={{ marginTop: "6px" }} />
           </Col>
           <Col>
             <Card.Body>
@@ -19,7 +19,7 @@ export default function LiveGameCards() {
               <Row>
                 <Col>
                   <img
-                    src="default-profile.png"
+                    src="/default-profile.png"
                     style={{
                       width: "50px",
                       borderRadius: "50%",
@@ -40,19 +40,17 @@ export default function LiveGameCards() {
         <Card id="LiveGameCards" border="primary">
           <Row>
             <Col md={3}>
-              <Card.Img src="Create a team.jpg" style={{ marginTop: "6px" }} />
+              <Card.Img src="/Create a team.jpg" style={{ marginTop: "6px" }} />
             </Col>
             <Col>
               <Card.Body>
                 <Card.Title>Starcraft 2</Card.Title>
                 <button id="LiveTag">Live Now</button>
-                <Card.Text style={{ opacity: "0.6" }}>
-                  Arcade games
-                </Card.Text>
+                <Card.Text style={{ opacity: "0.6" }}>Arcade games</Card.Text>
                 <Row>
                   <Col>
                     <img
-                      src="default-profile.png"
+                      src="/default-profile.png"
                       style={{
                         width: "50px",
                         borderRadius: "50%",

@@ -20,6 +20,7 @@ export default function TopNav() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setIsAuthenticated(true);
+        console.log("User is logged in", user.uid);
         try {
           const profileData = await getUserProfile();
           setUserProfile(profileData);
@@ -59,25 +60,25 @@ export default function TopNav() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mx-auto">
-            <Nav.Link id="navItems" href="/home">
+            <Nav.Link id="navItems" href="/pages/home">
               Home
             </Nav.Link>
-            <Nav.Link id="navItems" href="/Games">
+            <Nav.Link id="navItems" href="/pages/Games">
               Live Games
             </Nav.Link>
-            <Nav.Link id="navItems" href="/Teams">
+            <Nav.Link id="navItems" href="/pages/find-team">
               Find a Team
             </Nav.Link>
-            <Nav.Link id="navItems" href="/Players">
+            <Nav.Link id="navItems" href="/pages/SearchProfiles">
               Search Players
             </Nav.Link>
           </Nav>
           <Nav className="ml-auto">
-            {isAuthenticated && (
+            {isAuthenticated && userProfile && (
               <NavDropdown
                 id="collapsible-nav-dropdown"
                 title={
-                  <img src="default-profile.png" className="profile-image" />
+                  <img src={userProfile.imageUrl || "/default-profile.png"}  className="profile-image" />
                 }
               >
                 <NavDropdown.Item id="dropDownItems">
@@ -85,18 +86,24 @@ export default function TopNav() {
                   {userProfile ? userProfile.displayName : "Loading..."}
                 </NavDropdown.Item>
                 {isAuthenticated && userProfile && userProfile.docId && (
-                  <NavDropdown.Item
-                    id="dropDownItems"
-                    href={`./pages/profiles?docId=${docId}`}
-                  >
-                    My Profile
-                  </NavDropdown.Item>
+                  <>
+                    <NavDropdown.Item
+                      id="dropDownItems"
+                      href={`/pages/profiles?docId=${docId}`}
+                    >
+                      My Profile
+                    </NavDropdown.Item>
+
+                    <NavDropdown.Item
+                      id="dropDownItems"
+                      href={`./profiles/EditProfile`}
+                    >
+                      Edit Profile
+                    </NavDropdown.Item>
+                  </>
                 )}
                 <NavDropdown.Item id="dropDownItems" href="#action/3.2">
                   My Teams
-                </NavDropdown.Item>
-                <NavDropdown.Item id="dropDownItems" href="#action/3.3">
-                  Friends List
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item id="redDropDownItems" href="#action/3.4">

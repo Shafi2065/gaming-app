@@ -1,9 +1,8 @@
 "use client";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Loading from "@/app/loading";
-import getUserProfile from "@/app/GetFiles/ProfileDataFetch";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import FriendsBox from "@/components/FriendsBox";
@@ -13,75 +12,94 @@ import Button from "react-bootstrap/Button";
 import "./style.css";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import UploadImage from "@/app/cloudImageStorage";
-import updateProfile from "@/app/updateProfile";
 import ColourNav from "@/components/Nav";
 import GameCard from "@/components/gameCard";
 import { sendFriendRequest } from "@/app/FriendRequests";
-
-import { useQuery } from "@tanstack/react-query";
 import GetProfileByDocID from "@/app/GetFiles/ProfileFetchByDocID";
 
 export default function UserProfilePage() {
   const [key, setKey] = useState("home");
-  const [Hover, setHover] = useState(false);
   const [isProfileOwner, setIsProfileOwner] = useState(false);
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
 
   const defaultImageUrl = "/Create a team.jpg";
-  const searchParams = useSearchParams()
+  // Get the docId from the URL query string
+  const searchParams = useSearchParams();
 
-  const docId = searchParams.get("docId")
-  console.log("docId is", docId)
-  const auth = getAuth();
-  const user = auth.currentUser;
-  console.log("User is", user);
-  
+  const docId = searchParams.get("docId");
+
   useEffect(() => {
+    // This useEffect is dedicated to listening for auth state changes
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+        console.log("User is logged in as", user.uid);
+      } else {
+        setUserId(null);
+        setIsProfileOwner(false); // Reset ownership when logged out
+        console.log("User is not logged in");
+      }
+    });
+
+    // Clean up the subscription
+    return () => unsubscribe();
+  }, []); // This effect only needs to run once when the component mounts
+
+  useEffect(() => {
+    // This useEffect is dedicated to fetching profile data based on docId
+    // and determining profile ownership
     const fetchData = async () => {
       try {
         const userProfileData = await GetProfileByDocID(docId);
         if (userProfileData) {
           setUserProfile(userProfileData);
           console.log("User profile found", userProfileData);
+
+          // Determine profile ownership
+          if (userId && userProfileData.userID === userId) {
+            setIsProfileOwner(true);
+            console.log("User is the profile owner");
+          } else {
+            setIsProfileOwner(false);
+            console.log("User is not the profile owner");
+          }
         } else {
-          console.log("User profile not found");
+          console.log("Profile not found");
+          setUserProfile(null);
         }
       } catch (error) {
         console.log("Error fetching profile", error);
+        setUserProfile(null);
       } finally {
         setLoading(false);
       }
     };
-      fetchData();
-  }, []);
 
-  const handleFileChange = (e) => {
-    if (e.target.files[0]) {
-      UploadImage(e.target.files[0], async (imageUrl) => {
-        setUserProfile((prevProfile) => ({ ...prevProfile, imageUrl }));
-        if (isProfileOwner) {
-          await updateProfile(userId, { imageUrl });
+    if (docId) {
+      fetchData();
+    }
+  }, [docId, userId]); // Rerun this effect when docId or userId changes
+
+  const handleFriendRequest = async () => {
+    const Auth = getAuth();
+    const unsubscribe = onAuthStateChanged(Auth, async (user) => {
+      if (user) {
+        try {
+          await sendFriendRequest(docId);
+          console.log("Friend request sent by", user.uid, "to", docId);
+        } catch (error) {
+          console.error("Error sending friend request", error);
         }
-      });
-    }
+      } else {
+        console.log("User is not logged in.");
+      }
+    });
+    return () => unsubscribe();
   };
-  const handleFriendRequest = async (userId) => {
-    if (!userId) {
-      console.log("Receiver userID is not available");
-      return;
-    }
-    try {
-      await sendFriendRequest(userId);
-      console.log("Friend Request sent successfully");
-    } catch (error) {
-      console.log("Error sending Friend Request", error, error.code);
-    } finally {
-      setLoading(false);
-    }
-  };
+
   return (
     <div>
       {loading && <Loading />}
@@ -94,53 +112,26 @@ export default function UserProfilePage() {
                 <div style={{ position: "relative", display: "inline-block" }}>
                   <img
                     src={userProfile.imageUrl || defaultImageUrl}
-                    onMouseEnter={() => setHover(true)}
-                    onMouseLeave={() => setHover(false)}
-                    onClick={() => {
-                      // Trigger the file input when the image is clicked
-                      document.getElementById("fileInput")?.click();
-                    }}
                     style={{ width: "100%" }}
-                    className={Hover ? `hover` : ""}
                   />
-                  {/* Hidden file input */}
-                  <input
-                    id="fileInput"
-                    type="file"
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                  />
-                  {Hover && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        backgroundColor: "rgba(0, 0, 0, 0.7)",
-                        color: "white",
-                        padding: "10px",
-                        borderRadius: "5px",
-                      }}
-                    >
-                      <h2>Test</h2>
-                    </div>
-                  )}
                 </div>
               </Col>
               <Col xs={3}>
-                <h3 style={{ fontWeight: "600" }} className="profileName">
+                <h1 style={{ fontWeight: "600" }} className="profileName">
                   {userProfile.displayName}
-                </h3>
+                </h1>
                 <h3 style={{ fontWeight: "600" }} className="profileName">
-                  Member since {userProfile.today}
+                  Member since {userProfile.createdAt.toDate().toLocaleDateString()}
                 </h3>
                 <p id="profileBio">{userProfile.bio}</p>
               </Col>
               <Col xs={2} id="buttonColumn">
                 {!isProfileOwner && (
                   <>
-                    <Button className="Friend-button">
+                    <Button
+                      className="Friend-button"
+                      onClick={handleFriendRequest}
+                    >
                       Send Friend Request
                     </Button>
                     <Button className="Message-button">Send a message</Button>
@@ -161,12 +152,49 @@ export default function UserProfilePage() {
           fill
         >
           <Tab eventKey="home" title="Home">
-            <div className="text-center">
-              <h3>Favourite Games</h3>
-              <div className="card-container">
-                <GameCard />
-              </div>
-            </div>
+            <Row>
+              <Col md={{ span: 6, offset: 3 }}>
+                <div className="text-center">
+                  <h3>Favourite Games</h3>
+                  <div className="card-container">
+                    <GameCard />
+                  </div>
+                </div>
+              </Col>
+              <Col md={3} className="text-end" id="SideContent">
+                {userProfile && userProfile.socialMediaLinks ? (
+                  <>
+                    {/* Render social media links if they exist */}
+                    {userProfile.socialMediaLinks.discord && (
+                      <h6>Discord: {userProfile.socialMediaLinks.discord}</h6>
+                    )}
+                    {userProfile.socialMediaLinks.twitter && (
+                      <h6>Twitter: {userProfile.socialMediaLinks.twitter}</h6>
+                    )}
+                    {userProfile.socialMediaLinks.instagram && (
+                      <h6>
+                        Instagram: {userProfile.socialMediaLinks.instagram}
+                      </h6>
+                    )}
+                    {userProfile.socialMediaLinks.steam && (
+                      <h6>Steam: {userProfile.socialMediaLinks.steam}</h6>
+                    )}
+                    {userProfile.socialMediaLinks.twitch && (
+                      <h6>Twitch: {userProfile.socialMediaLinks.twitch}</h6>
+                    )}
+                    {userProfile.socialMediaLinks.youtube && (
+                      <h6>YouTube: {userProfile.socialMediaLinks.youtube}</h6>
+                    )}
+                    {userProfile.socialMediaLinks.other && (
+                      <h6>Other: {userProfile.socialMediaLinks.other}</h6>
+                    )}
+                  </>
+                ) : (
+                  // Display a message or leave empty if socialMediaLinks is null or undefined
+                  <h6>No social media links provided.</h6>
+                )}
+              </Col>
+            </Row>
           </Tab>
           <Tab eventKey="friends" title="Friends">
             <div id="FriendsSection">
@@ -190,46 +218,28 @@ export default function UserProfilePage() {
     </div>
   );
 }
-{
-  /* <div id="SecondSection">
-            <Row>
-              <Col>
-                <Tabs
-                  id="profileTab"
-                  activeKey={key}
-                  onSelect={(k) => setKey(k)}
-                  className="mb-3"
-                >
-                  <Tab eventKey="home" title="Home">
-                    <Row>
-                      <Col>
-                        <h3>Favourite Games</h3>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <ComponentCard />
-                    </Row>
-                  </Tab>
-                  <Tab eventKey="friends" title="Friends">
-                    Tab content for Profile
-                  </Tab>
-                  <Tab eventKey="messages" title="Messages">
-                    Tab content for Contact
-                  </Tab>
-                  <Tab eventKey="videos" title="Videos">
-                    Tab content for Contact
-                  </Tab>
-                  <Tab eventKey="Feed" title="Feed">
-                    Tab content for Contact
-                  </Tab>
-                </Tabs>
-                <p>Additional content under the tab menu near the top</p>
-              </Col>
-              <Col className="text-end" id="SideContent">
-                <h6>Social Media</h6>
-                <h6>Discord</h6>
-                <h6>Facebook</h6>
-              </Col>
-            </Row>
-          </div> */
-}
+
+/*
+ <Modal show={show} onHide={handleClose} autoFocus="true" className="dark-modal">
+          <Modal.Header closeButton>
+            <Modal.Title>Make Changes to your Profile</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <label htmlFor="bio">Bio: </label>
+            <textarea 
+            name= "Bio"
+            rows={6}
+            columns={50}
+            />
+            
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleClose}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+*/

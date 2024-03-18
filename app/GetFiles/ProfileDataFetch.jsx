@@ -20,8 +20,7 @@ export default async function getUserProfile() {
         const userProfileDoc = querySnapshot.docs[0]; 
         const userProfile = userProfileDoc.data(); // Access the data within the document snapshot
         console.log("User's display Name is: ", userProfile.displayName);
-        const docId = userProfile.docId;
-        return { ...userProfile, docId: userProfileDoc.id };; // allows us to call the function from elsewhere and get the profile data 
+        return { ...userProfile, docId: userProfileDoc.id }; // Include the document ID in the return value
       } else {
         console.log("Profile does not exist");
         return null; // returns nothing
@@ -33,4 +32,3 @@ export default async function getUserProfile() {
     console.log("User is not logged in");
   }
 }
-// The profile is not being fetched currently, fix the registration page and then test again with a new incognito user.

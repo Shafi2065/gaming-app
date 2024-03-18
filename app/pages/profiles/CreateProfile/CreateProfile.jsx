@@ -16,6 +16,15 @@ async function createProfile(
   imageUrl = "https://firebasestorage.googleapis.com/v0/b/gaming-app-83a01.appspot.com/o/ProfileImages%2FProfile3.jpg?alt=media&token=b9ed2379-7631-4fb3-8500-87b81d4d6e88",
   bio = "This user is currently a mystery but we are sure they are great!",
   commends = 0,
+  socialMediaLinks = {
+    discord: "",
+    twitter: "",
+    instagram: "",
+    steam: "",
+    twitch: "",
+    youtube: "",
+    other: "",
+  }
 ) {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -35,6 +44,9 @@ async function createProfile(
         imageUrl,
         bio,
         commends,
+        socialMediaLinks,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
       console.log("Successfully created profile with ID: ", docRef.id);
       return true;
