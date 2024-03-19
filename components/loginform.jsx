@@ -3,14 +3,8 @@ import Button from "react-bootstrap/Button";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
-
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signInWithRedirect,
-  getRedirectResult,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import Link from "next/link";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import "../app/firebaseAuth";
 import { useRouter } from "next/navigation";
 
@@ -71,6 +65,7 @@ function Login() {
           <Button variant="primary" type="submit">
             Login
           </Button>
+          <Link href="./login/register">Don't have an account? Register here</Link>
         </Form>
       </fieldset>
     </div>

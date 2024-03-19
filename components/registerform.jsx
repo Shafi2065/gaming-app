@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
+import { useRouter } from "next/navigation";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import "../app/firebaseAuth";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Link from "next/link";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,8 @@ function Register() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const router = useRouter();
 
   const handleRegistration = (e) => {
     e.preventDefault();
@@ -41,6 +44,9 @@ function Register() {
           setRegistrationSuccess(true);
           setErrorMessage("");
           handleShow();
+          setTimeout(() => {
+            router.push("/login");
+          }, 2000);
         })
         .catch((error) => {
           console.error(error.code, error.message);
@@ -90,10 +96,10 @@ function Register() {
               Close
             </Button>
           </Modal>
-
           <Button variant="primary" type="submit">
             Submit
           </Button>
+          <Link href="/pages/login">Already have an account? Login here</Link>
         </Form>
       </fieldset>
     </div>

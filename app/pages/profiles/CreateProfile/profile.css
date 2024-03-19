@@ -15,7 +15,10 @@ body {
   padding: 2rem;
   margin: 0;
 }
-
+a {
+  text-decoration: none;
+  margin-top: 2rem
+}
 .FormDiv {
   display: flex;
   align-items: center;
@@ -38,6 +41,9 @@ legend {
 }
 button {
   margin-top: 2rem;
+}
+.Submit {
+  padding: 12px 28px;
 }
 .progress-container {
   display: flex;

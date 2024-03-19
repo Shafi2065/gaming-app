@@ -34,6 +34,7 @@
     font-weight: bold;
     padding: 8px 34px;
     background-color: rgba(255,255,255,0);
+    color: white;
   }
   #register-span {
     float: left;

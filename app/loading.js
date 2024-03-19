@@ -1,9 +1,10 @@
 
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 export default function Loading() {
     return(
       <div>
-    <h6> "Loading..." </h6>
-    <p> Please wait!</p>
+    <ClimbingBoxLoader color="#36d7b7" />
+    <p>Loading...</p>
     </div>
     )
   }

@@ -31,6 +31,9 @@ export default function userProfile() {
   const Playstation = "Playstation";
   const Nintendo = "Nintendo";
   const PC = "PC";
+  const XBOX = "XBOX";
+  const Mobile = "Mobile";
+  const Other = "Other";
 
   const Morning = "Morning";
   const Afternoon = "Afternoon";
@@ -44,7 +47,14 @@ export default function userProfile() {
 
   const imageUrl =
     "https://firebasestorage.googleapis.com/v0/b/gaming-app-83a01.appspot.com/o/ProfileImages%2FProfile3.jpg?alt=media&token=b9ed2379-7631-4fb3-8500-87b81d4d6e88";
-  const [value, setValue] = useState([Playstation, PC, Nintendo]);
+  const [value, setValue] = useState([
+    Playstation,
+    PC,
+    Nintendo,
+    XBOX,
+    Mobile,
+    Other,
+  ]);
   const [PlayTimesvalue, setPlayTimesValue] = useState([
     Morning,
     Afternoon,
@@ -202,15 +212,24 @@ export default function userProfile() {
                       <ToggleButton id="tbg-btn-3" value={PC}>
                         PC
                       </ToggleButton>
+                      <ToggleButton id="tbg-btn-4" value={XBOX}>
+                        XBOX
+                      </ToggleButton>
+                      <ToggleButton id="tbg-btn-5" value={Mobile}>
+                        Mobile
+                      </ToggleButton>
+                      <ToggleButton id="tbg-btn-6" value={Other}>
+                        Other
+                      </ToggleButton>
                     </ToggleButtonGroup>
                   </Col>
                 </Row>
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
-                </Button>
                 <Button className="Primary-button" onClick={handleNext}>
                   Submit
                 </Button>
+                <Link href="#" onClick={handlePrevious}>
+                  Previous Question
+                </Link>
               </>
             )}
             {questionIndex === 2 && (
@@ -238,10 +257,12 @@ export default function userProfile() {
                     </ToggleButtonGroup>
                   </Col>
                 </Row>
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
+                <Button onClick={handleNext} className="Submit">
+                  Submit
                 </Button>
-                <Button onClick={handleNext}>Submit</Button>
+                <Link href="#" onClick={handlePrevious}>
+                  Previous Question
+                </Link>
               </>
             )}
             {questionIndex === 3 && (
@@ -269,10 +290,12 @@ export default function userProfile() {
                     </ToggleButtonGroup>
                   </Col>
                 </Row>
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
+                <Button onClick={handleNext} className="Submit">
+                  Submit
                 </Button>
-                <Button onClick={handleNext}>Submit</Button>
+                <Link href="#" onClick={handlePrevious}>
+                  Previous Question
+                </Link>
               </>
             )}
             {questionIndex === 4 && (
@@ -362,12 +385,56 @@ export default function userProfile() {
                         </h5>
                       </span>
                     </Col>
+                    <Col>
+                      <a href="#">
+                        <Image
+                          className={
+                            activeImage === "Minecraft" ? "Active" : ""
+                          }
+                          src="/minecraft.jpg"
+                          alt="Minecraft"
+                          width="200"
+                          height="150"
+                          onClick={() => {
+                            setActiveImage("Minecraft");
+                            setGameImages("Minecraft");
+                          }}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </a>
+                      <h5 class="mb-0 text-lightest text-uppercase">
+                        Counter Strike 2
+                      </h5>
+                      </Col>
+                      <Col>
+                      <a href="#">
+                        <Image
+                          className={
+                            activeImage === "Counter Strike 2" ? "Active" : ""
+                          }
+                          src="/CS2.jpg"
+                          alt="Counter Strike 2"
+                          width="200"
+                          height="150"
+                          onClick={() => {
+                            setActiveImage("Counter Strike 2");
+                            setGameImages("Counter Strike 2");
+                          }}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </a>
+                      <h5 class="mb-0 text-lightest text-uppercase">
+                        Counter Strike 2
+                      </h5>
+                    </Col>
                   </Row>
                 </div>
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
+                <Button onClick={handleNext} className="Submit">
+                  Submit
                 </Button>
-                <Button onClick={handleNext}>Submit</Button>
+                <Link href="#" onClick={handlePrevious}>
+                  Previous Question
+                </Link>
               </>
             )}
 
@@ -375,10 +442,12 @@ export default function userProfile() {
               <>
                 <p>Finalize your profile or go back</p>
                 {error && <h3>{error}</h3>}
-                <Button className="Primary-button" onClick={handlePrevious}>
-                  Previous
+                <Button type="submit" className="Submit">
+                  Create Profile
                 </Button>
-                <Button type="submit">Create Profile</Button>
+                <Link href="#" onClick={handlePrevious}>
+                  Previous Question
+                </Link>
               </>
             )}
           </Form>
