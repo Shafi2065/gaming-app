@@ -51,8 +51,9 @@ export default function LiveGameCards() {
                 <Card.Text style={{ opacity: "0.6" }}>Arcade games</Card.Text>
                 <Row>
                   <Col>
-                    <img
+                    <Image
                       src="/default-profile.png"
+                      alt = "profile picture"
                       style={{
                         width: "50px",
                         borderRadius: "50%",

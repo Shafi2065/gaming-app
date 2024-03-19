@@ -9,12 +9,18 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import getUserProfile from "@/app/GetFiles/ProfileDataFetch";
 import Image from "react-bootstrap/Image";
+import { useRouter } from "next/navigation";
 
 export default function ColourNav() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
   const [docId, setDocId] = useState(null);
 
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push("/pages/login/register");
+  };
   useEffect(() => {
     const auth = getAuth();
 
@@ -79,7 +85,11 @@ export default function ColourNav() {
               <NavDropdown
                 id="collapsible-nav-dropdown"
                 title={
-                  <Image src={userProfile.imageUrl || "/default-profile.png"}  className="profile-image" alt="Profile Picture" />
+                  <Image
+                    src={userProfile.imageUrl || "/default-profile.png"}
+                    className="profile-image"
+                    alt="Profile Picture"
+                  />
                 }
               >
                 <NavDropdown.Item id="dropDownItems">
@@ -88,19 +98,19 @@ export default function ColourNav() {
                 </NavDropdown.Item>
                 {isAuthenticated && userProfile && userProfile.docId && (
                   <>
-                  <NavDropdown.Item
-                    id="dropDownItems"
-                    href={`/pages/profiles?docId=${docId}`}
-                  >
-                    My Profile
-                  </NavDropdown.Item>
+                    <NavDropdown.Item
+                      id="dropDownItems"
+                      href={`/pages/profiles?docId=${docId}`}
+                    >
+                      My Profile
+                    </NavDropdown.Item>
 
-                  <NavDropdown.Item
-                    id="dropDownItems"
-                    href={`./profiles/EditProfile`}
-                  >
-                    Edit Profile
-                  </NavDropdown.Item>
+                    <NavDropdown.Item
+                      id="dropDownItems"
+                      href={`./profiles/EditProfile`}
+                    >
+                      Edit Profile
+                    </NavDropdown.Item>
                   </>
                 )}
                 <NavDropdown.Item id="dropDownItems" href="#action/3.2">
@@ -114,7 +124,9 @@ export default function ColourNav() {
             )}
             {!isAuthenticated && (
               <div id="register-container">
-                <button id="register-button">
+                <button
+                  id="register-button" onClick={handleClick}
+                >
                   REGISTER NOW
                   <span id="register-span">&#9747;</span>
                 </button>
