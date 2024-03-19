@@ -15,7 +15,7 @@ import Swal from "sweetalert2";
 import { ProfileStepper } from "@/components/Stepper";
 import Image from "react-bootstrap/Image";
 
-export default function userProfile() {
+export default function UserProfile() {
   const [displayName, setDisplayName] = useState("");
   const [platform, setPlatform] = useState("");
   const [playTimes, setPlayTimes] = useState("");

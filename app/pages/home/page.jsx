@@ -73,7 +73,7 @@ export default function Home() {
               <h1 className="heading">Build Your Clan</h1>
               <p className="subtext">
                 Connect with other gamers and create your own team to play with.{" "}
-                Can't find players that match your skill level? You can filter
+                Can&apos;t find players that match your skill level? You can filter
                 via competitive players when recruiting for your team. Need a
                 team that has a schedule that matches yours? Join a team and
                 filter by the time they play.

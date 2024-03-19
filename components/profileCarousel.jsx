@@ -1,13 +1,14 @@
 import React from "react";
 import Carousel from "react-bootstrap/Carousel";
 import "../app/pages/home/home.css";
+import Image from "react-bootstrap/Image";
 
 export default function NextCarousel() {
   return (
     <div className="Carousel">
       <Carousel data-bs-theme="dark">
       <Carousel.Item>
-        <img
+        <Image
           className="Carousel-Image"
           src="/InstagramPost.png"
           alt="First slide"
@@ -16,7 +17,7 @@ export default function NextCarousel() {
       </Carousel.Item>
 
       <Carousel.Item>
-        <img
+        <Image
           className="Carousel-Image2"
           src="/TwitterPost.png"
           alt="Second slide"

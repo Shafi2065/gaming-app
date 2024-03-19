@@ -65,7 +65,7 @@ function Login() {
           <Button variant="primary" type="submit">
             Login
           </Button>
-          <Link href="./login/register">Don't have an account? Register here</Link>
+          <Link href="./login/register">{"Don't have an account? Register here"}</Link>
         </Form>
       </fieldset>
     </div>

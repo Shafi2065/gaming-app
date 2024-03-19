@@ -4,6 +4,7 @@ import Table from "react-bootstrap/Table";
 import GetAllProfiles from "../../GetFiles/getAllProfiles";
 import Link from "next/link";
 import ColourNav from "@/components/Nav";
+import Image from "react-bootstrap/Image";
 
 export default function ProfileSearch() {
   const [profiles, setProfiles] = useState([]);
@@ -31,7 +32,7 @@ export default function ProfileSearch() {
           {profiles.map((profile, index) => (
             <tr key={profile.id}>
               <td>
-               <img src={profile.imageUrl} alt="Profile Image" width="50" height="50" />
+               <Image src={profile.imageUrl} alt="Profile Image" width="50" height="50" />
               </td>
               <td>{index + 1}</td>
               <td> 

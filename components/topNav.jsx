@@ -8,6 +8,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import getUserProfile from "@/app/GetFiles/ProfileDataFetch";
+import Image from "react-bootstrap/Image";
 
 export default function TopNav() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -49,8 +50,9 @@ export default function TopNav() {
       <Container>
         <Link href="/">
           <Navbar.Brand id="navbarTitle">
-            <img
+            <Image
               src="Logo.png"
+              alt="Logo"
               width="150"
               height="60"
               className="d-inline-block align-top"
@@ -78,7 +80,7 @@ export default function TopNav() {
               <NavDropdown
                 id="collapsible-nav-dropdown"
                 title={
-                  <img src={userProfile.imageUrl || "/default-profile.png"}  className="profile-image" />
+                  <Image src={userProfile.imageUrl || "/default-profile.png"}  className="profile-image" alt="Profile Picutre" />
                 }
               >
                 <NavDropdown.Item id="dropDownItems">

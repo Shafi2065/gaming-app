@@ -13,7 +13,8 @@ import "./style.css";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ColourNav from "@/components/Nav";
-import GameCard from "@/components/gameCard";
+import { GameCard, SupportedGames } from "@/components/gameCard";
+import Image from "react-bootstrap/Image";
 import { sendFriendRequest } from "@/app/FriendRequests";
 import GetProfileByDocID from "@/app/GetFiles/ProfileFetchByDocID";
 
@@ -110,9 +111,10 @@ export default function UserProfilePage() {
             <Row>
               <Col xs={2}>
                 <div style={{ position: "relative", display: "inline-block" }}>
-                  <img
+                  <Image
                     src={userProfile.imageUrl || defaultImageUrl}
                     style={{ width: "100%" }}
+                    alt="Profile picture"
                   />
                 </div>
               </Col>
@@ -218,28 +220,3 @@ export default function UserProfilePage() {
     </div>
   );
 }
-
-/*
- <Modal show={show} onHide={handleClose} autoFocus="true" className="dark-modal">
-          <Modal.Header closeButton>
-            <Modal.Title>Make Changes to your Profile</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <label htmlFor="bio">Bio: </label>
-            <textarea 
-            name= "Bio"
-            rows={6}
-            columns={50}
-            />
-            
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
-*/

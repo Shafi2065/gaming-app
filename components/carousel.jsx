@@ -1,13 +1,14 @@
 import React from "react";
 import Carousel from "react-bootstrap/Carousel";
 import "../app/pages/home/home.css";
+import Image from "react-bootstrap/Image";
 
 export default function ComponentCarousel() {
   return (
     <div className="Carousel">
       <Carousel fade data-bs-theme="light">
         <Carousel.Item>
-          <img src="Team.jpg" text="First slide" />
+          <Image src="Team.jpg" text="First slide" alt="First slide" />
           <Carousel.Caption>
             <h3>Already have a gaming crew?</h3>
             <p>
@@ -17,7 +18,7 @@ export default function ComponentCarousel() {
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img src="Team2.jpg" text="Second slide" />
+          <Image src="Team2.jpg" text="Second slide" alt="Second slide" />
           <Carousel.Caption>
             <h3>Looking for new members?</h3>
             <p>
@@ -28,7 +29,7 @@ export default function ComponentCarousel() {
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img src="Team3.jpg" text="Third slide" />
+          <Image src="Team3.jpg" text="Third slide" alt="Third slide" />
           <Carousel.Caption>
             <h3>In need of organization in your team?</h3>
             <p>

@@ -1,6 +1,7 @@
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Image from "react-bootstrap/Image";
 export default function LiveGameCards() {
   return (
     <div>
@@ -18,8 +19,9 @@ export default function LiveGameCards() {
               </Card.Text>
               <Row>
                 <Col>
-                  <img
+                  <Image
                     src="/default-profile.png"
+                    alt="profile picture"
                     style={{
                       width: "50px",
                       borderRadius: "50%",
