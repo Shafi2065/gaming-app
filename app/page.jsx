@@ -3,11 +3,7 @@ import React from "react";
 import "../public/style.css";
 import TopNav from "../components/topNav";
 import Footer from "../components/footer";
-import ComponentCard from "@/components/card";
-import ComponentCarousel from "@/components/carousel";
-import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "./firebaseAuth";
 import { useRouter } from "next/navigation";
 
@@ -26,7 +22,7 @@ function Home() {
   const router = useRouter();
 
   const handleRedirect = () => {
-   router.push("/home");
+   router.push("/pages/home");
   };
   return (
     <>

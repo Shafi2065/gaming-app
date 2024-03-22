@@ -200,7 +200,9 @@ export default function UserProfile() {
                     <ToggleButtonGroup
                       type="checkbox"
                       value={platform}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
                       aria-required
                     >
                       <ToggleButton id="tbg-btn-1" value={Playstation}>

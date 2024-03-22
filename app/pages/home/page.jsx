@@ -11,7 +11,7 @@ import { Button } from "react-bootstrap";
 import LiveGameCards from "@/components/livegamecard";
 import ColourNav from "@/components/Nav";
 import { TypeAnimation } from "react-type-animation";
-import { GameCard, SupportedGames } from "@/components/gameCard";
+import SupportedGames from "@/components/gameCard";
 
 function BgVideo() {
   return (

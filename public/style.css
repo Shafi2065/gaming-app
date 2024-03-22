@@ -35,14 +35,13 @@
     color: white;
   }
   #homepage-button {
-    background: blue; /* Set the alpha channel to 0 for full transparency */
+    background: blue; 
     border: 2px solid teal;
     border-radius: 4px;
     color: white;
     padding: 14px 40px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size: 20px;
   }
   

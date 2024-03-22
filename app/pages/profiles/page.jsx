@@ -6,17 +6,20 @@ import Loading from "@/app/loading";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import FriendsBox from "@/components/FriendsBox";
-import MessageTable from "@/components/MessageTable";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
+import { ButtonGroup, CardTitle } from "react-bootstrap";
 import "./style.css";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ColourNav from "@/components/Nav";
-import { GameCard, SupportedGames } from "@/components/gameCard";
+import Card from "react-bootstrap/Card";
+import CardImg from "react-bootstrap/CardImg";
 import Image from "react-bootstrap/Image";
 import { sendFriendRequest } from "@/app/FriendRequests";
 import GetProfileByDocID from "@/app/GetFiles/ProfileFetchByDocID";
+import MessageTable from "@/components/MessageTable";
+import getUserProfile from "@/app/GetFiles/ProfileDataFetch";
 
 export default function UserProfilePage() {
   const [key, setKey] = useState("home");
@@ -24,6 +27,8 @@ export default function UserProfilePage() {
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
+  const [profileUserId, setProfileUserId] = useState(null);
+  const [loggedInProfile, setLoggedInProfile] = useState(null);
 
   const defaultImageUrl = "/Create a team.jpg";
   // Get the docId from the URL query string
@@ -32,22 +37,29 @@ export default function UserProfilePage() {
   const docId = searchParams.get("docId");
 
   useEffect(() => {
-    // This useEffect is dedicated to listening for auth state changes
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserId(user.uid);
-        console.log("User is logged in as", user.uid);
-      } else {
-        setUserId(null);
-        setIsProfileOwner(false); // Reset ownership when logged out
-        console.log("User is not logged in");
-      }
-    });
-
-    // Clean up the subscription
-    return () => unsubscribe();
-  }, []); // This effect only needs to run once when the component mounts
+    const fetchLoggedInUser = async () => {
+      // This useEffect is dedicated to listening for auth state changes
+      const auth = getAuth();
+  
+      const unsubscribe = onAuthStateChanged(auth, async (user) => { // Make the callback async
+        if (user) {
+          const loggedInUser = await getUserProfile();
+          setLoggedInProfile(loggedInUser);
+          setUserId(user.uid);
+          console.log("User is logged in as", user.uid);
+        } else {
+          setUserId(null);
+          setIsProfileOwner(false); // Reset ownership when logged out
+          console.log("User is not logged in");
+        }
+      });
+  
+      // Clean up the subscription
+      return () => unsubscribe();
+    };
+  
+    fetchLoggedInUser();
+  }, [userId]); // This effect only needs to run once when the component mounts
 
   useEffect(() => {
     // This useEffect is dedicated to fetching profile data based on docId
@@ -57,6 +69,8 @@ export default function UserProfilePage() {
         const userProfileData = await GetProfileByDocID(docId);
         if (userProfileData) {
           setUserProfile(userProfileData);
+          setProfileUserId(userProfileData.userID);
+          console.log("User profile's user ID", userProfileData.userID);
           console.log("User profile found", userProfileData);
 
           // Determine profile ownership
@@ -85,20 +99,30 @@ export default function UserProfilePage() {
   }, [docId, userId]); // Rerun this effect when docId or userId changes
 
   const handleFriendRequest = async () => {
-    const Auth = getAuth();
-    const unsubscribe = onAuthStateChanged(Auth, async (user) => {
-      if (user) {
-        try {
-          await sendFriendRequest(docId);
-          console.log("Friend request sent by", user.uid, "to", docId);
-        } catch (error) {
-          console.error("Error sending friend request", error);
-        }
-      } else {
-        console.log("User is not logged in.");
-      }
-    });
-    return () => unsubscribe();
+    if (!userId) {
+      console.log("User is not logged in");
+      return;
+    }
+    if (userId === profileUserId) {
+      console.log("You can't send a friend request to yourself");
+      return;
+    }
+    try {
+      // Send friend request
+      await sendFriendRequest(userId, loggedInProfile.displayName, profileUserId, userProfile.displayName);
+      console.log("Friend request sent by", userId, "to", profileUserId);
+    } catch (error) {
+      console.error("Error sending friend request", error);
+    }
+  };
+  // Put all the game images in an object
+  const gameImages = {
+    "Dota 2": "/dota 2.jpg",
+    "Apex Legends": "/Apex Legends.jpg",
+    Fortnite: "/Fortnite.jpg",
+    "Counter Strike 2": "/CS2.jpg",
+    Minecraft: "/minecraft.jpg",
+    "Destiny 2": "/destiny2.jpg",
   };
 
   return (
@@ -106,8 +130,8 @@ export default function UserProfilePage() {
       {loading && <Loading />}
       {!loading && (
         <div id="ProfileBanner">
+          <ColourNav />
           <Container fluid>
-            <ColourNav />
             <Row>
               <Col xs={2}>
                 <div style={{ position: "relative", display: "inline-block" }}>
@@ -119,13 +143,33 @@ export default function UserProfilePage() {
                 </div>
               </Col>
               <Col xs={3}>
-                <h1 style={{ fontWeight: "600" }} className="profileName">
+                <h1
+                  style={{
+                    fontWeight: "600",
+                    display: "inline-block",
+                    marginLeft: "2rem",
+                  }}
+                  className="profileName"
+                >
                   {userProfile.displayName}
                 </h1>
-                <h3 style={{ fontWeight: "600" }} className="profileName">
-                  Member since {userProfile.createdAt.toDate().toLocaleDateString()}
+                <h3
+                  style={{
+                    fontWeight: "600",
+                    display: "inline-block",
+                    marginLeft: "2rem",
+                  }}
+                  className="profileName"
+                >
+                  Member since{" "}
+                  {userProfile.createdAt.toDate().toLocaleDateString()}
                 </h3>
-                <p id="profileBio">{userProfile.bio}</p>
+                <p
+                  id="profileBio"
+                  style={{ display: "inline-block", marginLeft: "2rem" }}
+                >
+                  {userProfile.bio}
+                </p>
               </Col>
               <Col xs={2} id="buttonColumn">
                 {!isProfileOwner && (
@@ -150,16 +194,87 @@ export default function UserProfilePage() {
           id="profileTab"
           activeKey={key}
           onSelect={(k) => setKey(k)}
-          className="mb-3"
+          className="mb-5"
           fill
         >
           <Tab eventKey="home" title="Home">
             <Row>
               <Col md={{ span: 6, offset: 3 }}>
+                <div>
+                  <h3 className="text-center">Tags:</h3>
+                  <Row>
+                    {userProfile &&
+                      Array.isArray(userProfile.platform) &&
+                      userProfile.platform
+                        .filter(Boolean) // Filter out any empty values
+                        .map((platform) => (
+                          <ButtonGroup
+                            size="lg"
+                            className="mb-3"
+                            style={{ width: "auto" }}
+                          >
+                            <Button key={platform} value={platform}>
+                              {platform}
+                            </Button>
+                          </ButtonGroup>
+                        ))}
+                  </Row>
+                  <Row>
+                    {userProfile &&
+                      Array.isArray(userProfile.playTimes) &&
+                      userProfile.playTimes
+                        .filter(Boolean) // Filter out any empty values
+                        .map((playTime) => (
+                          <ButtonGroup
+                            size="lg"
+                            className="mb-3"
+                            style={{ width: "auto" }}
+                          >
+                            <Button key={playTime} value={playTime}>
+                              {playTime}
+                            </Button>
+                          </ButtonGroup>
+                        ))}
+                  </Row>
+                  <Row>
+                    {userProfile &&
+                      Array.isArray(userProfile.tags) &&
+                      userProfile.tags
+                        .filter(Boolean) // Filter out any empty values
+                        .map((tag) => (
+                          <ButtonGroup
+                            size="lg"
+                            className="mb-3"
+                            style={{ width: "auto" }}
+                          >
+                            <Button key={tag} value={tag}>
+                              {tag}
+                            </Button>
+                          </ButtonGroup>
+                        ))}
+                  </Row>
+                </div>
                 <div className="text-center">
-                  <h3>Favourite Games</h3>
+                  <h3>Favourite Game</h3>
                   <div className="card-container">
-                    <GameCard />
+                    <div id="ProfileGame">
+                      <Row>
+                        <Col>
+                          <Card>
+                            <CardTitle>
+                              {userProfile ? userProfile.game : ""}
+                            </CardTitle>
+                            <CardImg
+                              variant="top"
+                              src={
+                                userProfile ? gameImages[userProfile.game] : ""
+                              }
+                              className="gameCard"
+                            />
+                          </Card>
+                        </Col>
+                      </Row>
+                    </div>
                   </div>
                 </div>
               </Col>

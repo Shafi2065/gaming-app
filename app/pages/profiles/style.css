@@ -9,7 +9,7 @@ body {
 }
 
 #ProfileBanner {
-  background-color: #1f1f1f;
+  background-color: black;
   border-bottom: 1px solid white;
 }
 #SideContent {
@@ -54,7 +54,7 @@ body {
 }
 .profileName {
   color: white;
-  padding: 0.5em;
+  margin-bottom: 1em;
 
 }
 #profileBio {
@@ -68,14 +68,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 2em;
+  margin: 0;
+}
+#ProfileStatistics {
+  margin: 3rem;
 }
 .card-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 100px;
-  padding-bottom: 200px;
+  padding-top: 1em;
+  padding-bottom: 2rem;
 }
 .gameCard {
   height: auto;

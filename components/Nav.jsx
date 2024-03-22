@@ -124,14 +124,31 @@ export default function ColourNav() {
             )}
             {!isAuthenticated && (
               <div id="register-container">
-                <button
-                  id="register-button" onClick={handleClick}
-                >
+                <button id="register-button" onClick={handleClick}>
                   REGISTER NOW
                   <span id="register-span">&#9747;</span>
                 </button>
               </div>
             )}
+            {isAuthenticated && !userProfile && (
+              <NavDropdown
+                id="collapsible-nav-dropdown"
+                title={
+                  <Image
+                    src="/default-profile.png"
+                    className="profile-image"
+                    alt="Profile Picture"
+                  />
+                }
+              >
+                <NavDropdown.Item
+                  id="dropDownItems"
+                  href={`/pages/profiles/CreateProfile`}
+                >
+                  Create Profile
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}  
           </Nav>
         </Navbar.Collapse>
       </Container>

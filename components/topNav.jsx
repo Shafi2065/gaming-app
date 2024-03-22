@@ -19,8 +19,8 @@ export default function TopNav() {
   const router = useRouter();
 
   const handleClick = () => {
-router.push("/pages/login/register");
-  }
+    router.push("/pages/login/register");
+  };
   useEffect(() => {
     const auth = getAuth();
 
@@ -86,7 +86,11 @@ router.push("/pages/login/register");
               <NavDropdown
                 id="collapsible-nav-dropdown"
                 title={
-                  <Image src={userProfile.imageUrl || "/default-profile.png"}  className="profile-image" alt="Profile Picutre" />
+                  <Image
+                    src={userProfile.imageUrl || "/default-profile.png"}
+                    className="profile-image"
+                    alt="Profile Picutre"
+                  />
                 }
               >
                 <NavDropdown.Item id="dropDownItems">
@@ -126,6 +130,25 @@ router.push("/pages/login/register");
                   <span id="register-span">&#9747;</span>
                 </button>
               </div>
+            )}
+            {isAuthenticated && !userProfile && (
+              <NavDropdown
+                id="collapsible-nav-dropdown"
+                title={
+                  <Image
+                    src="/default-profile.png"
+                    className="profile-image"
+                    alt="Profile Picture"
+                  />
+                }
+              >
+                <NavDropdown.Item
+                      id="dropDownItems"
+                      href={`/pages/profiles/CreateProfile`}
+                    >
+                      Create Profile
+                    </NavDropdown.Item>
+              </NavDropdown>
             )}
           </Nav>
         </Navbar.Collapse>
