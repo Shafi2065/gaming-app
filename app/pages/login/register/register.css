@@ -16,6 +16,7 @@ body {
     flex-direction: column;
     padding: 2rem;
     margin: 0;
+    background-color: black;
   }
   
   .FormDiv {
@@ -30,6 +31,7 @@ body {
     padding: 0;
     border: solid 1px white;
     border-radius: 6px;
+    background-color: black;
   }
   
   legend {
@@ -45,7 +47,6 @@ body {
   }
   textarea, input {
     height: 2.5rem;
-    background-color: rgb(28, 28, 28);
     width: 100%;
 }
   

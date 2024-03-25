@@ -14,11 +14,32 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
+  const regex = /.com$/;
+
+    const validateInputs = () => {
+      if (!email.trim()) {
+        setErrorMessage("Please enter your email");
+        return false;
+      }
+      if (!password.trim()) {
+        setErrorMessage("Please enter your password");
+        return false;
+      }
+      const emailRegex = /.+@.+\..+/;
+      if (!emailRegex.test(email)) {
+        setErrorMessage("Please enter a valid email address");
+        return false;
+      }
+      return true;
+    };
+
   const handleLogin = (e) => {
     e.preventDefault();
 
     const auth = getAuth();
-
+    if (validateInputs()) {
+      return;
+    }
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
@@ -28,6 +49,7 @@ function Login() {
           text: "redirecting to another page",
           icon: "success",
         });
+        setErrorMessage("");
       })
       .then(() => {
         setTimeout(() => {
@@ -37,6 +59,11 @@ function Login() {
       })
       .catch((error) => {
         console.error(error.code, error.message);
+        if (error.code === "auth/invalid-email") {
+          setErrorMessage("Invalid email address");
+        } else if (error.code === "auth/user-not-found") {
+          setErrorMessage("User not found");
+        }
       });
   };
   return (
@@ -60,12 +87,14 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <p>{errorMessage}</p>
+            <p style={{ color: "red" }}>{errorMessage}</p>
           </label>
           <Button variant="primary" type="submit">
             Login
           </Button>
-          <Link href="./login/register">{"Don't have an account? Register here"}</Link>
+          <Link href="./login/register">
+            {"Don't have an account? Register here"}
+          </Link>
         </Form>
       </fieldset>
     </div>
